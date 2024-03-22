@@ -1,0 +1,9 @@
+AudioListener3D
+SpotLight3D
+RayCast3D
+AnimationPlayer
+OmniLight3D
+Camera3D
+MeshInstance3D
+Area3D
+TileMap

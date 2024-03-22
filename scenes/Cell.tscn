@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cp0icl32oxv5t"]
+
+[ext_resource type="Script" path="res://scenes/Cell.gd" id="1_rx1by"]
+
+[node name="Cell" type="Area3D"]
+script = ExtResource("1_rx1by")
+
+[node name="EastFace" type="MeshInstance3D" parent="."]
