@@ -1,7 +1,12 @@
-res://Player.tscn
-res://Player.gd
-res://scenes/Map.tscn
 res://scenes/World.tscn
-res://scenes/Cell.tscn
 res://scenes/World.gd
-res://default_bus_layout.tres
+res://assets/materials/Bark.tres
+res://environment.tres
+res://scenes/Minimap.tscn
+res://scenes/Map.tscn
+res://Player.tscn
+res://entities/Enemy.tscn
+res://scenes/DoorCell.tscn
+res://assets/materials/GrassPath.tres
+res://assets/materials/Rock.tres
+res://entities/Enemy.gd

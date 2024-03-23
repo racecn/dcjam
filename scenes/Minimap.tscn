@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bagvryoswmavp"]
+
+[ext_resource type="Script" path="res://scenes/Minimap.gd" id="1_gjgbt"]
+[ext_resource type="PackedScene" uid="uid://cmg7xofkcuux7" path="res://scenes/Map.tscn" id="2_48b56"]
+
+[node name="Minimap" type="Node2D"]
+script = ExtResource("1_gjgbt")
+Map = ExtResource("2_48b56")
+
+[node name="Viewport" type="SubViewport" parent="."]
+handle_input_locally = false
+size = Vector2i(627, 512)
+
+[node name="Camera" type="Camera2D" parent="Viewport"]
+ignore_rotation = false

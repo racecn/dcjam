@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bagvryoswmavp"]
+
+[ext_resource type="Script" path="res://scenes/Minimap.gd" id="1_gjgbt"]
+[ext_resource type="PackedScene" uid="uid://cmg7xofkcuux7" path="res://scenes/Map.tscn" id="2_48b56"]
+
+[node name="Minimap" type="Node"]
+script = ExtResource("1_gjgbt")
+Map = ExtResource("2_48b56")
+
+[node name="Viewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+size = Vector2i(200, 200)
+
+[node name="Camera" type="Camera2D" parent="Viewport"]
+zoom = Vector2(0.77, 0.77)

@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://bt00rkm162ial"]
+
+[ext_resource type="Script" path="res://entities/Enemy.gd" id="1_gkhkg"]
+[ext_resource type="Texture2D" uid="uid://cpurqaepm2dpy" path="res://assets/textures/Grass.png" id="2_43pl0"]
+
+[node name="Enemy" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.51, -0.5)
+script = ExtResource("1_gkhkg")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.164085, 0)
+exclude_parent = false
+target_position = Vector3(0, 0, -0.6)
+collision_mask = 2
+hit_from_inside = true
+hit_back_faces = false
+collide_with_areas = true
+collide_with_bodies = false
+debug_shape_thickness = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+texture = ExtResource("2_43pl0")
+
+[node name="moveTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="moveTimer" to="." method="_on_move_timer_timeout"]

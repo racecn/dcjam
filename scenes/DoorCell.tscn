@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://cvlvj5ipeptrw"]
+
+[ext_resource type="Script" path="res://scenes/DoorCell.gd" id="1_vvknn"]
+[ext_resource type="Material" uid="uid://cmyhx6lm8l1er" path="res://assets/materials/Rock.tres" id="2_dib1m"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_0rov6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_usley"]
+
+[node name="DoorCell" type="Area3D"]
+collision_layer = 2
+script = ExtResource("1_vvknn")
+
+[node name="DoorMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, -0.5)
+layers = 2
+material_override = ExtResource("2_dib1m")
+mesh = SubResource("BoxMesh_0rov6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, -0.5)
+shape = SubResource("BoxShape3D_usley")

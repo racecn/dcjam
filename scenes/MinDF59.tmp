@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bagvryoswmavp"]
+
+[ext_resource type="Script" path="res://scenes/Minimap.gd" id="1_gjgbt"]
+
+[node name="Minimap" type="Node"]
+script = ExtResource("1_gjgbt")
+
+[node name="Viewport" type="SubViewport" parent="."]
+size = Vector2i(200, 200)
+
+[node name="Camera" type="Camera2D" parent="Viewport"]
