@@ -21,11 +21,11 @@ var can_move = true
 @onready var ray_left: RayCast3D = $RayLeft
 @onready var ray_right: RayCast3D = $RayRight
 # Camera
-@onready var camera: Camera3D = $Camera3D
+@onready var camera: Camera3D = $Control/SubViewportContainer/SubViewport/Camera3D
 # Timer for continuous turning
 @onready var turn_timer: Timer = $TurnTimer
 # audio
-@onready var audioPlayer: AudioStreamPlayer3D = $AudioStreamPlayer3D
+@onready var audioPlayer: AudioStreamPlayer3D = $Control/SubViewportContainer/SubViewport/AudioStreamPlayer3D
 
 # Called when the node enters the scene tree for the first time
 func _ready():
@@ -35,6 +35,10 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame
 func _process(delta):
+	
+	camera.rotation_degrees.y = rotation_degrees.y
+	camera.position = position
+	
 	if can_move:
 		var direction = Vector3.ZERO
 

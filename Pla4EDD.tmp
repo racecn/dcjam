@@ -99,14 +99,7 @@ stream = ExtResource("3_fl5t7")
 volume_db = -6.685
 doppler_tracking = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="Control"]
-clip_children = 2
-layout_direction = 1
+[node name="Card" parent="Control" instance=ExtResource("4_t0exv")]
 layout_mode = 1
-offset_right = 323.0
-offset_bottom = 88.0
-
-[node name="Card" parent="Control/PanelContainer" instance=ExtResource("4_t0exv")]
-layout_mode = 2
 
 [connection signal="timeout" from="MovementCooldownTimer" to="." method="_on_movement_cooldown_timer_timeout"]

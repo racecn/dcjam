@@ -34,16 +34,20 @@ func generate_map():
 	if tileMap:
 		var used_tiles = tileMap.get_used_cells(0)
 		for tile in used_tiles:
-			var cell
-			var source_id = tileMap.get_cell_source_id(0, tile)
-			if source_id == DOOR_SOURCE_ID:  # Check if the tile is a door
-				cell = DoorCell.instantiate()
-			else:
-				cell = Cell.instantiate()
+			var cell = Cell.instantiate()  # Always create a normal cell
 			add_child(cell)
 			cell.position = Vector3(tile.x * Globals.GRID_SIZE, 0, tile.y * Globals.GRID_SIZE)
 			cells.append(cell)
+
+			var source_id = tileMap.get_cell_source_id(0, tile)
+			if source_id == DOOR_SOURCE_ID:  # Check if the tile is a door
+				var door_cell = DoorCell.instantiate()
+				add_child(door_cell)
+				door_cell.position = cell.position  # Position the door cell at the same location
+				cells.append(door_cell)  # Optionally, add the door cell to the cells array if needed
+
 			print("Added cell at pos: ", cell.position)
+
 		for cell in cells:
 			cell.update_faces(used_tiles, tileMap)
 

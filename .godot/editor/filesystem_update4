@@ -1,12 +1,10 @@
 res://scenes/World.tscn
 res://scenes/World.gd
-res://assets/materials/Bark.tres
+res://assets/materials/Rock.tres
 res://environment.tres
 res://scenes/Minimap.tscn
-res://scenes/Map.tscn
 res://Player.tscn
 res://entities/Enemy.tscn
-res://scenes/DoorCell.tscn
-res://assets/materials/GrassPath.tres
-res://assets/materials/Rock.tres
-res://entities/Enemy.gd
+res://scenes/Map.tscn
+res://scenes/Cell.tscn
+res://entities/Card.tscn

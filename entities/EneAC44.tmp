@@ -33,7 +33,6 @@ debug_shape_thickness = 5
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-billboard = 2
 texture = ExtResource("2_43pl0")
 
 [node name="moveTimer" type="Timer" parent="."]
@@ -44,6 +43,7 @@ position = Vector2(46, 32)
 tile_set = SubResource("TileSet_pw3h3")
 rendering_quadrant_size = 1
 format = 2
+layer_0/tile_data = PackedInt32Array(0, 3, 0, 2, 65539, 0, 4, 131075, 0)
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 

@@ -33,7 +33,6 @@ debug_shape_thickness = 5
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-billboard = 2
 texture = ExtResource("2_43pl0")
 
 [node name="moveTimer" type="Timer" parent="."]

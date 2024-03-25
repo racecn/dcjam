@@ -1,19 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bt00rkm162ial"]
+[gd_scene load_steps=3 format=3 uid="uid://bt00rkm162ial"]
 
 [ext_resource type="Script" path="res://entities/Enemy.gd" id="1_gkhkg"]
 [ext_resource type="Texture2D" uid="uid://cpurqaepm2dpy" path="res://assets/textures/Grass.png" id="2_43pl0"]
-[ext_resource type="Texture2D" uid="uid://cuq38lgj67gru" path="res://assets/textures/gridnew.jpg" id="3_ku27w"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dekg5"]
-texture = ExtResource("3_ku27w")
-texture_region_size = Vector2i(4, 4)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_pw3h3"]
-tile_size = Vector2i(4, 4)
-sources/3 = SubResource("TileSetAtlasSource_dekg5")
 
 [node name="Enemy" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.51, -0.5)
@@ -33,18 +21,11 @@ debug_shape_thickness = 5
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-billboard = 2
 texture = ExtResource("2_43pl0")
 
 [node name="moveTimer" type="Timer" parent="."]
 
 [node name="TileMap" type="TileMap" parent="."]
-top_level = true
-position = Vector2(46, 32)
-tile_set = SubResource("TileSet_pw3h3")
-rendering_quadrant_size = 1
 format = 2
-
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 
 [connection signal="timeout" from="moveTimer" to="." method="_on_move_timer_timeout"]
