@@ -8,3 +8,4 @@ res://entities/Enemy.tscn
 res://scenes/Map.tscn
 res://scenes/Cell.tscn
 res://entities/Card.tscn
+res://entities/Card.gd

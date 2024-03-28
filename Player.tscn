@@ -103,8 +103,9 @@ doppler_tracking = 2
 clip_children = 2
 layout_direction = 1
 layout_mode = 1
+offset_top = 149.845
 offset_right = 323.0
-offset_bottom = 88.0
+offset_bottom = 237.845
 
 [node name="Card" parent="Control/PanelContainer" instance=ExtResource("4_t0exv")]
 layout_mode = 2
