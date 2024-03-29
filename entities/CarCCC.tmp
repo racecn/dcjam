@@ -31,12 +31,4 @@ position = Vector2(15.5329, 39.5329)
 position = Vector2(17, 25)
 shape = SubResource("RectangleShape2D_lhfjr")
 
-[node name="Name" type="Label" parent="."]
-offset_left = 3.0
-offset_top = 5.0
-offset_right = 68.0
-offset_bottom = 35.0
-theme_override_font_sizes/font_size = 11
-text = "test"
-
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

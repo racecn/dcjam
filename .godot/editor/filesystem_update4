@@ -1,4 +1,5 @@
 res://scenes/World.tscn
+res://entities/Card.gd
 res://scenes/World.gd
 res://assets/materials/Rock.tres
 res://environment.tres
@@ -8,4 +9,4 @@ res://entities/Enemy.tscn
 res://scenes/Map.tscn
 res://scenes/Cell.tscn
 res://entities/Card.tscn
-res://entities/Card.gd
+res://Player.gd

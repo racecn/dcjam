@@ -1,0 +1,56 @@
+{
+	"cards": [
+	  {
+		"name": "Fireball",
+		"type": "Attack",
+		"mana_cost": 3,
+		"description": "Unleashes a fiery blast that damages and burns the target.",
+		"target": "Enemy",
+		"effects": [
+		  {
+			"type": "Damage",
+			"value": 10
+		  },
+		  {
+			"type": "Apply",
+			"status": "Burn",
+			"duration": 2
+		  }
+		]
+	  },
+	  {
+		"name": "Slash",
+		"type": "Attack",
+		"mana_cost": 1,
+		"description": "A quick slash that causes bleeding.",
+		"target": "Enemy",
+		"effects": [
+		  {
+			"type": "Damage",
+			"value": 3
+		  },
+		  {
+			"type": "Apply",
+			"status": "Bleed",
+			"duration": 1
+		  }
+		]
+	  },
+	  {
+		"name": "Shield",
+		"type": "Defense",
+		"mana_cost": 1,
+		"description": "Raises a shield that blocks incoming damage for this turn.",
+		"target": "Self",
+		"effects": [
+		  {
+			"type": "Apply",
+			"status": "Block",
+			"value": 5,
+			"duration": 1
+		  }
+		]
+	  }
+	]
+  }
+  

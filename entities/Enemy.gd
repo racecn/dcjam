@@ -303,12 +303,10 @@ func map_walls():
 		raycast.target_position = direction
 		raycast.force_raycast_update()
 		if raycast.is_colliding():
-			print("colliding with ", raycast.get_collider())
 			var wall_grid_pos = to_grid_position(global_transform.origin + direction)
 			tile_map.set_cell(0, wall_grid_pos, 3, Vector2i(2, 0))
 			tile_map.update_internals()
-			print("Wall added at: ", wall_grid_pos)
-
+		
 func move_in_direction(direction: int):
 	match direction:
 		Direction.NORTH:
@@ -352,9 +350,7 @@ func to_grid_position(world_position: Vector3) -> Vector2:
 func update_tile_map(grid_pos: Vector2i):
 	var layer = 0 
 	var atlas_coords = tile_map.get_cell_atlas_coords(layer, grid_pos)
-	print("TileMap - Atlas Coords:", atlas_coords, "Grid Pos:", grid_pos)
 	if atlas_coords == Vector2i(-1, -1):  # Cell does not exist
-		print("TileMap - Cell does not exist. Adding...")
 		tile_map.set_cell(layer, grid_pos, 3, Vector2i(0, 0))  # Add the cell with atlas coords (0, 0)
 		tile_map.update_internals()
 	elif atlas_coords == Vector2i(0, 0):  # Cell is visited

@@ -32,6 +32,7 @@ position = Vector2(17, 25)
 shape = SubResource("RectangleShape2D_lhfjr")
 
 [node name="Name" type="Label" parent="."]
+layout_mode = 0
 offset_left = 3.0
 offset_top = 5.0
 offset_right = 68.0

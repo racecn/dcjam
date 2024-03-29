@@ -46,7 +46,6 @@ func generate_map():
 				door_cell.position = cell.position  # Position the door cell at the same location
 				cells.append(door_cell)  # Optionally, add the door cell to the cells array if needed
 
-			print("Added cell at pos: ", cell.position)
 
 		for cell in cells:
 			cell.update_faces(used_tiles, tileMap)

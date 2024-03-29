@@ -3,10 +3,9 @@
 [ext_resource type="Script" path="res://Player.gd" id="1_5scwy"]
 [ext_resource type="PackedScene" uid="uid://bagvryoswmavp" path="res://scenes/Minimap.tscn" id="2_p4h6q"]
 [ext_resource type="AudioStream" uid="uid://br1wvn2ld0e1e" path="res://assets/sound/player/twostep-6.wav" id="3_fl5t7"]
+[ext_resource type="PackedScene" uid="uid://t7105orrm5ij" path="res://entities/Card.tscn" id="4_t0exv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_khbk4"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xhcd8"]
 
 [node name="Player" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, -0.5)
@@ -109,7 +108,7 @@ stream = ExtResource("3_fl5t7")
 volume_db = -6.685
 doppler_tracking = 2
 
-[node name="handContainer" type="PanelContainer" parent="Control"]
+[node name="PanelContainer" type="PanelContainer" parent="Control"]
 clip_children = 2
 layout_mode = 1
 anchors_preset = -1
@@ -121,41 +120,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_khbk4")
 
-[node name="TextEdit" type="TextEdit" parent="Control/handContainer"]
+[node name="Card" parent="Control/PanelContainer" instance=ExtResource("4_t0exv")]
 layout_mode = 2
-theme_override_font_sizes/font_size = 6
-placeholder_text = "test"
-
-[node name="CardPos1" type="Node2D" parent="Control/handContainer"]
-position = Vector2(111.595, 36.205)
-
-[node name="CardPos2" type="Node2D" parent="Control/handContainer"]
-position = Vector2(40.06, 36.205)
-
-[node name="CardPos3" type="Node2D" parent="Control/handContainer"]
-position = Vector2(174.855, 36.205)
-
-[node name="PausePopup" type="Control" parent="."]
-visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="PanelContainer" type="PanelContainer" parent="PausePopup"]
-layout_mode = 0
-offset_left = 113.0
-offset_top = 44.0
-offset_right = 201.0
-offset_bottom = 162.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_xhcd8")
-
-[node name="Button" type="Button" parent="PausePopup/PanelContainer"]
-layout_mode = 2
-text = "quit"
-
-[node name="Button2" type="Button" parent="PausePopup/PanelContainer"]
-layout_mode = 2
-text = "options"
 
 [connection signal="timeout" from="MovementCooldownTimer" to="." method="_on_movement_cooldown_timer_timeout"]
