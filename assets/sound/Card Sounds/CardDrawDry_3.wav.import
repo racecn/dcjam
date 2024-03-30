@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://clxvfq0je12ai"
+path="res://.godot/imported/CardDrawDry_3.wav-5f5c5dcbab956d9772f99cbfd807d7ce.sample"
+
+[deps]
+
+source_file="res://assets/sound/Card Sounds/CardDrawDry_3.wav"
+dest_files=["res://.godot/imported/CardDrawDry_3.wav-5f5c5dcbab956d9772f99cbfd807d7ce.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3 uid="uid://dnnqa6liid5np"]
+
+[ext_resource type="Script" path="res://Torch.gd" id="1_7ys0k"]
+[ext_resource type="Texture2D" uid="uid://bbf8tr8mmo427" path="res://assets/textures/torch/SD_Anim_Frame_0.png" id="2_pkfjy"]
+[ext_resource type="Texture2D" uid="uid://dtiw88e6ycn4l" path="res://assets/textures/torch/SD_Anim_Frame_5.png" id="3_g1f3y"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5n17e"]
+transparency = 1
+albedo_texture = ExtResource("2_pkfjy")
+emission = Color(0.976471, 0.745098, 0, 1)
+emission_energy_multiplier = 0.0
+texture_filter = 0
+billboard_mode = 2
+
+[sub_resource type="Animation" id="Animation_2miv7"]
+resource_name = "torch_flame"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material_override")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_b82pc"]
+_data = {
+"torch_flame": SubResource("Animation_2miv7")
+}
+
+[node name="Torch" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.413817, 0)
+script = ExtResource("1_7ys0k")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+material_override = SubResource("StandardMaterial3D_5n17e")
+texture = ExtResource("3_g1f3y")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite3D")
+libraries = {
+"": SubResource("AnimationLibrary_b82pc")
+}
+autoplay = "torch_flame"
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_energy = 0.06
+distance_fade_enabled = true
+distance_fade_begin = 1.25
+distance_fade_length = 1.9

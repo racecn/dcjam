@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://knhvwmcm7lvt"
+path="res://.godot/imported/HandsMovement_2.wav-8ea48a85cc9529e07b8eead8b627ffe9.sample"
+
+[deps]
+
+source_file="res://assets/sound/Monster Sounds/Hands/HandsMovement_2.wav"
+dest_files=["res://.godot/imported/HandsMovement_2.wav-8ea48a85cc9529e07b8eead8b627ffe9.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

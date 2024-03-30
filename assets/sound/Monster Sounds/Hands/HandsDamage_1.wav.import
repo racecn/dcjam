@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cj7cpt7h3p7sj"
+path="res://.godot/imported/HandsDamage_1.wav-e9cb13dc611bf39047c1fdb078918694.sample"
+
+[deps]
+
+source_file="res://assets/sound/Monster Sounds/Hands/HandsDamage_1.wav"
+dest_files=["res://.godot/imported/HandsDamage_1.wav-e9cb13dc611bf39047c1fdb078918694.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

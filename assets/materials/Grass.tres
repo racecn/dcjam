@@ -3,7 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://cc7qk1pe53bnw" path="res://assets/textures/Dirt.png" id="1_e4wbw"]
 
 [resource]
-diffuse_mode = 1
-specular_mode = 2
+transparency = 1
+blend_mode = 1
+diffuse_mode = 3
 albedo_texture = ExtResource("1_e4wbw")
+emission_enabled = true
+emission = Color(0.329412, 0.00392157, 0.129412, 1)
 texture_filter = 0

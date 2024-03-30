@@ -14,6 +14,15 @@ enum State {
 	MOVING_TO_TARGET
 }
 
+enum EnemyType {
+	STATIC,
+	EXPLORING,
+	PATROLLING
+}
+
+signal enter_combat(EnemyType)
+
+@export var enemyType: EnemyType
 # Variables to track the current direction, state, target position, and movement properties
 var current_direction = Direction.NORTH
 var current_state = State.EXPLORING
@@ -23,7 +32,6 @@ var update_interval = 2.0
 var is_moving = false
 var random_moves_made = 0
 var max_random_moves = 5  # Number of random moves before using A*
-
 
 # Variables for exploration and patrolling logic
 var exploring_path = []
@@ -41,8 +49,6 @@ var current_path = []
 @onready var sprite = $Sprite3D
 @onready var moveTimer = $moveTimer
 @onready var tile_map = $TileMap  # Reference to the TileMap node
-
-
 
 # Node class for A* pathfinding
 class AStarNode:
@@ -64,7 +70,6 @@ class AStarNode:
 func heuristic(start: Vector2, end: Vector2) -> int:
 	return abs(start.x - end.x) + abs(start.y - end.y)
 
-# A* pathfinding functions
 # A* pathfinding functions
 func a_star_search(start: Vector2, end: Vector2) -> Array:
 	var open_set = [AStarNode.new(start, 0, heuristic(start, end), null)]
@@ -136,6 +141,14 @@ func _ready():
 	set_process(true)
 	moveTimer.wait_time = update_interval
 	moveTimer.start()
+	connect("combat_start", handle_combat_start)
+	connect("combat_end", handle_combat_end)
+
+func handle_combat_start():
+	pass
+	
+func handle_combat_end():
+	pass
 
 # Process function to handle movement and state updates
 func _process(delta: float):
@@ -289,24 +302,6 @@ func can_move_in_direction(direction: int) -> bool:
 
 	return true
 
-
-
-func map_walls():
-	var directions = [
-		Vector3(0, 0, -1),  # North
-		Vector3(0, 0, 1),   # South
-		Vector3(1, 0, 0),   # East
-		Vector3(-1, 0, 0)   # West
-	]
-
-	for direction in directions:
-		raycast.target_position = direction
-		raycast.force_raycast_update()
-		if raycast.is_colliding():
-			var wall_grid_pos = to_grid_position(global_transform.origin + direction)
-			tile_map.set_cell(0, wall_grid_pos, 3, Vector2i(2, 0))
-			tile_map.update_internals()
-		
 func move_in_direction(direction: int):
 	match direction:
 		Direction.NORTH:
@@ -363,3 +358,7 @@ func update_tile_map(grid_pos: Vector2i):
 	
 	tile_map.update_internals()
 
+
+func _on_area_3d_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+	if area.is_in_group("player"):
+		enter_combat.emit(enemyType)

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bnbjoblfyyhhh"
+path="res://.godot/imported/GhoulDamage_1.wav-9f0e855d29fd4bc0dae5dc4f1c18dc55.sample"
+
+[deps]
+
+source_file="res://assets/sound/Monster Sounds/Ghoul/GhoulDamage_1.wav"
+dest_files=["res://.godot/imported/GhoulDamage_1.wav-9f0e855d29fd4bc0dae5dc4f1c18dc55.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

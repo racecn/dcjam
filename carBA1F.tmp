@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmgveewxmtslk"]
+
+[ext_resource type="Script" path="res://scripts/CardManager.gd" id="1_0l2dp"]
+
+[node name="CardManager" type="Control"]
+layout_mode = 3
+anchor_top = 0.626
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -405.648
+offset_right = -1152.0
+offset_bottom = -648.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0l2dp")
+
+[node name="HandContainer" type="Panel" parent="."]
+offset_left = 246.0
+offset_top = 457.0
+offset_right = 894.0
+offset_bottom = 650.0

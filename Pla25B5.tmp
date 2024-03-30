@@ -1,0 +1,161 @@
+[gd_scene load_steps=6 format=3 uid="uid://focw42gin5w6"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_5scwy"]
+[ext_resource type="PackedScene" uid="uid://bagvryoswmavp" path="res://scenes/Minimap.tscn" id="2_p4h6q"]
+[ext_resource type="AudioStream" uid="uid://br1wvn2ld0e1e" path="res://assets/sound/player/twostep-6.wav" id="3_fl5t7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_khbk4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xhcd8"]
+
+[node name="Player" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, -0.5)
+script = ExtResource("1_5scwy")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_energy = 0.26
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="RayForward" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.164085, 0)
+exclude_parent = false
+target_position = Vector3(0, 0, -1)
+collision_mask = 2
+hit_from_inside = true
+hit_back_faces = false
+collide_with_areas = true
+collide_with_bodies = false
+debug_shape_thickness = 5
+
+[node name="RayBack" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.164085, 0)
+exclude_parent = false
+target_position = Vector3(0, 0, 1)
+collision_mask = 2
+hit_from_inside = true
+hit_back_faces = false
+collide_with_areas = true
+collide_with_bodies = false
+debug_shape_custom_color = Color(0, 1, 0, 1)
+
+[node name="RayRight" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000561774, 0.165698, -0.00063169)
+exclude_parent = false
+target_position = Vector3(1, 0, 0)
+collision_mask = 2
+hit_from_inside = true
+hit_back_faces = false
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="RayLeft" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.164085, 0)
+exclude_parent = false
+target_position = Vector3(-1, 0, 0)
+collision_mask = 2
+hit_from_inside = true
+hit_back_faces = false
+collide_with_areas = true
+collide_with_bodies = false
+debug_shape_custom_color = Color(0.960784, 0, 0.501961, 1)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+light_energy = 1.96
+spot_range = 2.185
+spot_attenuation = 0.476832
+spot_angle = 81.4
+spot_angle_attenuation = 3.4461
+
+[node name="MovementCooldownTimer" type="Timer" parent="."]
+wait_time = 0.235
+
+[node name="TurnTimer" type="Timer" parent="."]
+wait_time = 0.581
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.834
+anchor_bottom = 0.679
+offset_right = 0.119995
+offset_bottom = 0.0399933
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Control/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(267, 163)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Control/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, -0.275)
+current = true
+fov = 63.9
+
+[node name="Minimap" parent="Control/SubViewportContainer/SubViewport/Camera3D" instance=ExtResource("2_p4h6q")]
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Control/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, -0.5)
+stream = ExtResource("3_fl5t7")
+volume_db = -6.685
+doppler_tracking = 2
+
+[node name="handContainer" type="PanelContainer" parent="Control"]
+clip_children = 2
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.663
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -0.12001
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_khbk4")
+
+[node name="TextEdit" type="TextEdit" parent="Control/handContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 6
+placeholder_text = "test"
+
+[node name="CardPos1" type="Node2D" parent="Control/handContainer"]
+position = Vector2(111.595, 36.205)
+
+[node name="CardPos2" type="Node2D" parent="Control/handContainer"]
+position = Vector2(40.06, 36.205)
+
+[node name="CardPos3" type="Node2D" parent="Control/handContainer"]
+position = Vector2(174.855, 36.205)
+
+[node name="PausePopup" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PanelContainer" type="PanelContainer" parent="PausePopup"]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 44.0
+offset_right = 201.0
+offset_bottom = 162.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_xhcd8")
+
+[node name="Button" type="Button" parent="PausePopup/PanelContainer"]
+layout_mode = 2
+text = "quit"
+
+[node name="Button2" type="Button" parent="PausePopup/PanelContainer"]
+layout_mode = 2
+text = "options"
+
+[connection signal="timeout" from="MovementCooldownTimer" to="." method="_on_movement_cooldown_timer_timeout"]

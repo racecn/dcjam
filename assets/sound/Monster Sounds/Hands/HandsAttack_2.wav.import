@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cavor3gety3ao"
+path="res://.godot/imported/HandsAttack_2.wav-735ccc92d203df7b8736702382439146.sample"
+
+[deps]
+
+source_file="res://assets/sound/Monster Sounds/Hands/HandsAttack_2.wav"
+dest_files=["res://.godot/imported/HandsAttack_2.wav-735ccc92d203df7b8736702382439146.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

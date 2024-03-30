@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://ehoauco1mv2n"]
+
+[ext_resource type="Texture2D" uid="uid://dpgku703fhyqn" path="res://assets/textures/key/0001.png" id="1_0qlyh"]
+[ext_resource type="Script" path="res://entities/Detail.gd" id="1_dnkqq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lxd2d"]
+transparency = 1
+diffuse_mode = 1
+specular_mode = 2
+albedo_texture = ExtResource("1_0qlyh")
+metallic = 0.53
+emission = Color(0.643137, 0.501961, 0.278431, 1)
+emission_energy_multiplier = 1.65
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+distance_fade_max_distance = 2.1
+
+[node name="Detail" type="Node3D"]
+script = ExtResource("1_dnkqq")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000198603, 0.0983936, -0.00120747)
+material_override = SubResource("StandardMaterial3D_lxd2d")
+gi_mode = 2
+pixel_size = 0.0015
+billboard = 1
+texture = ExtResource("1_0qlyh")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

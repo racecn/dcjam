@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cvlvj5ipeptrw"]
 
 [ext_resource type="Script" path="res://scenes/DoorCell.gd" id="1_vvknn"]
-[ext_resource type="Material" uid="uid://cmyhx6lm8l1er" path="res://assets/materials/Rock.tres" id="2_dib1m"]
+[ext_resource type="Material" uid="uid://ce816om3otqvg" path="res://assets/materials/Rock.tres" id="2_dib1m"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_0rov6"]
 

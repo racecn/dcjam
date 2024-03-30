@@ -1,14 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://cp0icl32oxv5t"]
+[gd_scene load_steps=8 format=3 uid="uid://cp0icl32oxv5t"]
 
 [ext_resource type="Script" path="res://scenes/Cell.gd" id="1_rx1by"]
-[ext_resource type="Material" uid="uid://cojyaom4o334v" path="res://assets/materials/Dirt.tres" id="2_gnwh3"]
+[ext_resource type="Material" uid="uid://ch6u3twr03nwl" path="res://assets/materials/Bricks.tres" id="2_d0el6"]
+[ext_resource type="Material" uid="uid://cyjj7knmpcws0" path="res://assets/materials/Bricks2.tres" id="2_nd2wy"]
+[ext_resource type="Material" uid="uid://ly21t8ji52ns" path="res://assets/materials/Grass.tres" id="4_mse6n"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_41m4m"]
 size = Vector3(0.001, 1, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_q1yot"]
 
-[node name="Cell" type="Area3D"]
+[sub_resource type="BoxMesh" id="BoxMesh_5i7lm"]
+
+[node name="Cell" type="Area3D" groups=["cells"]]
 collision_layer = 2
 script = ExtResource("1_rx1by")
 
@@ -16,32 +20,13 @@ script = ExtResource("1_rx1by")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000499994, 0.5, -0.5)
 shape = SubResource("BoxShape3D_41m4m")
 
-[node name="WestFace" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.5, -0.5)
-layers = 2
-material_override = ExtResource("2_gnwh3")
-cast_shadow = 0
-mesh = SubResource("QuadMesh_q1yot")
-
 [node name="East" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, -0.5)
 shape = SubResource("BoxShape3D_41m4m")
 
-[node name="EastFace" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1, 0.5, -0.5)
-layers = 2
-material_override = ExtResource("2_gnwh3")
-mesh = SubResource("QuadMesh_q1yot")
-
 [node name="South" type="CollisionShape3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.5, 0.5, 0)
 shape = SubResource("BoxShape3D_41m4m")
-
-[node name="SouthFace" type="MeshInstance3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.5, 0.5, 0)
-layers = 2
-material_override = ExtResource("2_gnwh3")
-mesh = SubResource("QuadMesh_q1yot")
 
 [node name="North" type="CollisionShape3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.5, 0.5, -1)
@@ -50,17 +35,42 @@ shape = SubResource("BoxShape3D_41m4m")
 [node name="NorthFace" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, -1)
 layers = 2
-material_override = ExtResource("2_gnwh3")
+material_override = ExtResource("2_nd2wy")
 mesh = SubResource("QuadMesh_q1yot")
 
 [node name="BottomFace" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 0, -0.5)
 layers = 2
-material_override = ExtResource("2_gnwh3")
+material_override = ExtResource("2_d0el6")
 mesh = SubResource("QuadMesh_q1yot")
 
 [node name="TopFace" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.5, 1, -0.5)
 layers = 2
-material_override = ExtResource("2_gnwh3")
+material_override = ExtResource("2_nd2wy")
 mesh = SubResource("QuadMesh_q1yot")
+
+[node name="WestFace" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.5, -0.5)
+layers = 2
+material_override = ExtResource("2_nd2wy")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_q1yot")
+
+[node name="EastFace" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1, 0.5, -0.5)
+layers = 2
+material_override = ExtResource("2_nd2wy")
+mesh = SubResource("QuadMesh_q1yot")
+
+[node name="SouthFace" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.5, 0.5, 0)
+layers = 2
+material_override = ExtResource("2_nd2wy")
+mesh = SubResource("QuadMesh_q1yot")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.887272, 0, 0, 0, 0.0999862, 0, 0, 0, 0.860259, 0.534748, -0.0212638, -0.479309)
+visible = false
+material_override = ExtResource("4_mse6n")
+mesh = SubResource("BoxMesh_5i7lm")

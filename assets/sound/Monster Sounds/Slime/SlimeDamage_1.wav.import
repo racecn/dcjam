@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c8482lusxxbq7"
+path="res://.godot/imported/SlimeDamage_1.wav-7c2de858a39ade706262e76b0a4740de.sample"
+
+[deps]
+
+source_file="res://assets/sound/Monster Sounds/Slime/SlimeDamage_1.wav"
+dest_files=["res://.godot/imported/SlimeDamage_1.wav-7c2de858a39ade706262e76b0a4740de.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
