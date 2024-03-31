@@ -23,6 +23,12 @@ offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_vtqq3")
+cardname = null
+type = null
+mana_cost = null
+description = null
+effects = null
+area_of_effect = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1

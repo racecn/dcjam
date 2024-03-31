@@ -19,3 +19,4 @@ res://scenes/Cell.gd
 res://Player.gd
 res://assets/cards/cards.json
 res://entities/Enemy.gd
+res://scripts/Events.gd

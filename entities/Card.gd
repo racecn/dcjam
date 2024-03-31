@@ -99,11 +99,12 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		audio.stream = pickup_stream
 		audio.play()
-		if dragging and event is InputEventMouseMotion:
-			position = get_global_mouse_position() - drag_offset
-		elif event.pressed and self.get_global_rect().has_point(get_global_mouse_position()):
+		if event.pressed:
 			dragging = true
-			drag_offset = get_global_mouse_position() - global_position
-			move_to_front()
-		elif not event.pressed:
+			drag_offset = global_position - get_global_mouse_position()
+			move_to_front()  # Ensure the card is rendered on top while dragging
+		else:
 			dragging = false
+	elif dragging and event is InputEventMouseMotion:
+		global_position = get_global_mouse_position() + drag_offset
+
