@@ -26,8 +26,6 @@ func _ready():
 		environment.background_mode = Environment.BG_COLOR
 	else:
 		print("Environment is not set")
-	connect("enter_combat", handle_combat_start)
-	connect("exit_combat", handle_combat_end)
 	generate_map()
 
 

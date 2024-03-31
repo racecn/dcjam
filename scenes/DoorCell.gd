@@ -5,6 +5,10 @@ var isOpen = false
 @onready var door_mesh: MeshInstance3D = $DoorMesh
 
 
+func _ready():
+	connect("card_marker_enabled", on_enable_marker)
+	connect("card_marker_disabled", on_disable_marker)
+
 func open():
 	isOpen = true
 	# Add code to animate the door opening or change its appearance

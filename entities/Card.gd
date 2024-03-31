@@ -25,6 +25,8 @@ var original_scale: Vector2 = Vector2(1, 1)  # Store the original scale of the c
 
 var is_hovered: bool = false
 
+signal card_mouse_entered(pos)
+signal card_mouse_exited
 signal card_marker_enabled(pos)
 
 func _process(delta):
@@ -65,11 +67,13 @@ func update_card_visuals():
 
 func _on_mouse_entered():
 	var affected_cells = calculate_affected_cells()
-	emit_signal("card_marker_enabled", affected_cells, true)
+	print("affected cells ", affected_cells)
+	emit_signal("card_mouse_entered", affected_cells)  # Emit signal with the necessary data
 
 func _on_mouse_exited():
-	emit_signal("card_marker_enabled", [], false)
-
+	print("emit to turn off marker")
+	emit_signal("card_mouse_exited")  # Emit signal without data
+	
 func get_player_orientation() -> int:
 	return player.orientation
 
@@ -81,8 +85,16 @@ func calculate_affected_cells() -> Array:
 		var relative_pos_vector = Vector2(relative_pos_array[0], relative_pos_array[1])
 		var transformed_offset = transform_offset_by_orientation(relative_pos_vector, player_orientation)
 		var affected_position = player_position + transformed_offset
-		affected_positions.append(Vector2(floor(affected_position.x), floor(affected_position.y)))
+		if is_cell_valid(affected_position):  # Check if the cell is valid
+			affected_positions.append(Vector2(floor(affected_position.x), floor(affected_position.y)))
 	return affected_positions
+
+func is_cell_valid(position: Vector2) -> bool:
+	# Add your criteria here to determine if the cell is valid
+	# For example, you can check if the cell is within the bounds of the grid
+	return true  # Replace with your actual logic
+
+
 
 func get_player_position() -> Vector2:
 	return player.grid_position
@@ -107,4 +119,3 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 			dragging = false
 	elif dragging and event is InputEventMouseMotion:
 		global_position = get_global_mouse_position() + drag_offset
-

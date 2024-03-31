@@ -4,9 +4,11 @@ class_name Cell
 enum CellType { NORMAL, DOOR }
 
 var cell_type = CellType.NORMAL
+var grid_position
 
-@onready var marker: MeshInstance3D = $MeshInstance3D
-
+var marker
+signal card_marker_enabled
+signal card_marker_disabled
 
 @onready var faces = {
 	"north": {"face": $NorthFace, "col": $North},
@@ -16,13 +18,23 @@ var cell_type = CellType.NORMAL
 }
 
 func _ready():
-	connect("card_marker_enabled", on_enable_marker)
-	connect("card_marker_disabled", on_disable_marker)
-	add_to_group("cells")
+	
+	print("Checking marker node...")
+	marker = get_node_or_null("MeshInstance3D")
 	if marker:
+		print("Marker node found!")
 		marker.visible = false
 	else:
-		print("Marker node is null!")
+		print("Marker node is null or has been freed.")
+
+	print("mygrid pos ", grid_position)
+	connect("card_marker_enabled", on_enable_marker)
+	connect("card_marker_disabled", on_disable_marker)
+	update_grid_position()
+	add_to_group("cells")
+
+func update_grid_position():
+	grid_position = Vector2(floor(global_transform.origin.x / Globals.GRID_SIZE), floor(global_transform.origin.z / Globals.GRID_SIZE))
 
 func update_faces(cell_list, tileMap) -> void:
 	var my_grid_position = Vector2(position.x / Globals.GRID_SIZE, position.z)
@@ -40,11 +52,10 @@ func update_faces(cell_list, tileMap) -> void:
 			if face_and_col["col"]:
 				face_and_col["col"].queue_free()
 
-func on_enable_marker(pos):
-	var my_grid_position = Vector2(floor(position.x / Globals.GRID_SIZE), floor(position.z / Globals.GRID_SIZE))
-	if pos == my_grid_position:
-		marker.visible = true
+func on_enable_marker():
+	print("marker toggled on")
+	marker.visible = true
 
-func on_disable_marker(pos):
-	if pos == Vector2(position.x / Globals.GRID_SIZE, position.z):
+func on_disable_marker():
+	if marker and marker.visible == true:
 		marker.visible = false

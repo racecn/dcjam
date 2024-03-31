@@ -45,6 +45,7 @@ var grid_position: Vector2  # Grid position in 2D space
 # Combat
 signal combat_started
 signal combat_ended
+signal end_turn
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -133,6 +134,8 @@ func _on_movement_cooldown_timer_timeout():
 func _input(event):
 	if event.is_action_pressed("pause"):  # Adjust the action name as needed
 		toggle_pause()
+	elif event.is_action_pressed("end_turn") and is_in_combat:
+		emit_signal("end_turn")
 
 func toggle_pause():
 	is_paused = !is_paused
@@ -143,18 +146,14 @@ func toggle_pause():
 		pause_popup.hide()
 
 func enter_combat():
-	emit_signal("combat_started")
 	is_in_combat = true
-	# Additional actions for entering combat, e.g., switching to a combat UI
+	can_move = false  # Disallow movement
+	emit_signal("combat_started")
 
 func exit_combat():
-	emit_signal("combat_ended")
 	is_in_combat = false
-	# Additional actions for exiting combat, e.g., switching back to normal UI
-
-# Connect this function to the enemy's collision signal
-func _on_enemy_collision(enemy):
-	enter_combat()
+	can_move = true  # Re-allow movement
+	emit_signal("combat_ended")
 
 func _on_quit_button_pressed():
 	get_tree().quit(0)

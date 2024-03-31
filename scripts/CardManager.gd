@@ -89,4 +89,24 @@ func render_hand():
 		# Now position_step only affects the x-coordinate relative to hand_container
 		card_instance.position = Vector2(position_step.x * i, 0)
 		hand_container.add_child(card_instance)
+		card_instance.connect("card_mouse_entered", _on_card_mouse_entered)
+		card_instance.connect("card_mouse_exited", _on_card_mouse_exited)
 
+func _on_card_mouse_entered(affected_cells):
+	print("Parent CardManager reached")
+	var all_cells = get_tree().get_nodes_in_group("cells")  # Assuming 'cells' is the group name for your cell nodes
+
+	for cell in all_cells:
+		var cell_position = cell.grid_position  # Assuming each cell has a 'grid_position' property
+		for affected_position in affected_cells:
+			if cell_position == affected_position:
+				cell.on_enable_marker()  # Call the method to highlight or indicate the cell is affected
+
+
+func _on_card_mouse_exited():
+	var parent_node = get_parent()
+	# Assuming each cell has a method called 'clear_highlight' to remove its affected indication
+	for i in range(parent_node.get_child_count()):
+		var child = parent_node.get_child(i)
+		if "Cell" in child.name:  # Adjust the naming convention as needed
+			child.on_disable_marker()
