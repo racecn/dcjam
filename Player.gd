@@ -70,6 +70,8 @@ func _process(delta):
 
 	if can_move and not is_in_combat:
 		var direction = Vector3.ZERO
+		
+		
 
 		# Get input for movement
 		if Input.is_action_just_pressed("move_forward") and not ray_forward.is_colliding():

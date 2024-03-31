@@ -1,1 +1,2 @@
+AudioStreamWAV
 StandardMaterial3D
