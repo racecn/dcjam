@@ -15,11 +15,14 @@ var deck_size: int = 25
 var max_hand_size: int = 4
 
 # Audio For Shuffle
-@onready var Shufflesound: AudioStreamPlayer = $AudioStreamPlayer
+@onready var Shufflesound: AudioStreamPlayer = $Shufflesound
 
 # Audio For Draw
+@onready var Drawsound: AudioStreamPlayer = $Drawsound
+
 
 # Audio For Play 
+
 
 # Signals
 signal hand_updated(hand)
@@ -57,6 +60,7 @@ func draw_card():
 		var card = deck.pop_front()
 		hand.append(card)
 		update_hand()
+		Drawsound.play()
 
 func draw_cards(number_of_cards: int):
 	for _i in range(number_of_cards):

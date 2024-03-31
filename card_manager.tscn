@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cmgveewxmtslk"]
+[gd_scene load_steps=18 format=3 uid="uid://cmgveewxmtslk"]
 
 [ext_resource type="Script" path="res://scripts/CardManager.gd" id="1_0l2dp"]
 [ext_resource type="AudioStream" uid="uid://hpkudxmf5fyd" path="res://assets/sound/Card Sounds/CardShuffle_1.wav" id="2_dvbyc"]
@@ -8,6 +8,13 @@
 [ext_resource type="AudioStream" uid="uid://cm3833f81i2hw" path="res://assets/sound/Card Sounds/CardShuffle_5.wav" id="6_5c04t"]
 [ext_resource type="AudioStream" uid="uid://et3ntje6034j" path="res://assets/sound/Card Sounds/CardShuffle_6.wav" id="7_6i35q"]
 [ext_resource type="AudioStream" uid="uid://0bk6oayffgxn" path="res://assets/sound/Card Sounds/CardShuffle_7.wav" id="8_rn3d6"]
+[ext_resource type="AudioStream" uid="uid://b3251u41su8y8" path="res://assets/sound/Card Sounds/CardDrawWet_1.wav" id="9_o010h"]
+[ext_resource type="AudioStream" uid="uid://bs01wlgixmo8n" path="res://assets/sound/Card Sounds/CardDrawWet_2.wav" id="10_pp58m"]
+[ext_resource type="AudioStream" uid="uid://c5cv7l3l1hab4" path="res://assets/sound/Card Sounds/CardDrawWet_3.wav" id="11_iu0pf"]
+[ext_resource type="AudioStream" uid="uid://bfqknv5hqrmvh" path="res://assets/sound/Card Sounds/CardDrawWet_4.wav" id="12_xowry"]
+[ext_resource type="AudioStream" uid="uid://bg36vqt3q1ctj" path="res://assets/sound/Card Sounds/CardDrawWet_5.wav" id="13_6ag2l"]
+[ext_resource type="AudioStream" uid="uid://b4176agig3sm3" path="res://assets/sound/Card Sounds/CardDrawWet_6.wav" id="14_256ev"]
+[ext_resource type="AudioStream" uid="uid://cbgot2hbmnulh" path="res://assets/sound/Card Sounds/CardDrawWet_7.wav" id="15_llsom"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_xxfc0"]
 streams_count = 7
@@ -24,6 +31,23 @@ stream_4/weight = 1.0
 stream_5/stream = ExtResource("7_6i35q")
 stream_5/weight = 1.0
 stream_6/stream = ExtResource("8_rn3d6")
+stream_6/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_5xt4e"]
+streams_count = 7
+stream_0/stream = ExtResource("9_o010h")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("10_pp58m")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("11_iu0pf")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("12_xowry")
+stream_3/weight = 1.0
+stream_4/stream = ExtResource("13_6ag2l")
+stream_4/weight = 1.0
+stream_5/stream = ExtResource("14_256ev")
+stream_5/weight = 1.0
+stream_6/stream = ExtResource("15_llsom")
 stream_6/weight = 1.0
 
 [node name="CardManager" type="Control"]
@@ -49,5 +73,8 @@ offset_right = -228.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="Shufflesound" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamRandomizer_xxfc0")
+
+[node name="Drawsound" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamRandomizer_5xt4e")
