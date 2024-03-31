@@ -11,3 +11,4 @@ res://Player.tscn
 res://card_manager.tscn
 res://scenes/World.tscn
 res://Player.gd
+res://scripts/CardManager.gd

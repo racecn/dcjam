@@ -14,9 +14,18 @@ var card_data
 var deck_size: int = 25
 var max_hand_size: int = 4
 
+# Audio For Shuffle
+@onready var Shufflesound: AudioStreamPlayer = $AudioStreamPlayer
+
+# Audio For Draw
+
+# Audio For Play 
+
 # Signals
 signal hand_updated(hand)
 
+
+ 
 func _ready():
 	# Initialize the deck with cards from StaticData
 	card_data = StaticData.card_data
@@ -34,6 +43,7 @@ func _ready():
 
 func shuffle_deck():
 	deck.shuffle()
+	Shufflesound.play()
 
 func draw_card():
 	if deck.size() == 0:

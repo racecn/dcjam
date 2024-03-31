@@ -1,6 +1,30 @@
-[gd_scene load_steps=2 format=3 uid="uid://cmgveewxmtslk"]
+[gd_scene load_steps=10 format=3 uid="uid://cmgveewxmtslk"]
 
 [ext_resource type="Script" path="res://scripts/CardManager.gd" id="1_0l2dp"]
+[ext_resource type="AudioStream" uid="uid://hpkudxmf5fyd" path="res://assets/sound/Card Sounds/CardShuffle_1.wav" id="2_dvbyc"]
+[ext_resource type="AudioStream" uid="uid://bwwgnw61db2ho" path="res://assets/sound/Card Sounds/CardShuffle_2.wav" id="3_h0p8w"]
+[ext_resource type="AudioStream" uid="uid://bej8s0thw3hfv" path="res://assets/sound/Card Sounds/CardShuffle_3.wav" id="4_h7cma"]
+[ext_resource type="AudioStream" uid="uid://bnrwbw2hywjbg" path="res://assets/sound/Card Sounds/CardShuffle_4.wav" id="5_pf6cb"]
+[ext_resource type="AudioStream" uid="uid://cm3833f81i2hw" path="res://assets/sound/Card Sounds/CardShuffle_5.wav" id="6_5c04t"]
+[ext_resource type="AudioStream" uid="uid://et3ntje6034j" path="res://assets/sound/Card Sounds/CardShuffle_6.wav" id="7_6i35q"]
+[ext_resource type="AudioStream" uid="uid://0bk6oayffgxn" path="res://assets/sound/Card Sounds/CardShuffle_7.wav" id="8_rn3d6"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_xxfc0"]
+streams_count = 7
+stream_0/stream = ExtResource("2_dvbyc")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("3_h0p8w")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("4_h7cma")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("5_pf6cb")
+stream_3/weight = 1.0
+stream_4/stream = ExtResource("6_5c04t")
+stream_4/weight = 1.0
+stream_5/stream = ExtResource("7_6i35q")
+stream_5/weight = 1.0
+stream_6/stream = ExtResource("8_rn3d6")
+stream_6/weight = 1.0
 
 [node name="CardManager" type="Control"]
 layout_mode = 3
@@ -24,3 +48,6 @@ offset_left = 255.0
 offset_right = -228.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamRandomizer_xxfc0")
