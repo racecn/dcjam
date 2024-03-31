@@ -1,4 +1,4 @@
-res://scenes/World.tscn
+res://entities/Card.tscn
 res://entities/Card.gd
 res://scenes/World.gd
 res://assets/materials/Bricks.tres
@@ -7,16 +7,7 @@ res://assets/materials/Grass.tres
 res://assets/materials/Rock.tres
 res://environment.tres
 res://entities/Detail.gdshader
-res://scenes/DoorCell.tscn
-res://entities/Card.tscn
-res://entities/Detail.tscn
-res://entities/Torch.tscn
-res://card_manager.tscn
 res://Player.tscn
-res://scenes/Cell.tscn
-res://entities/Enemy.tscn
-res://scenes/Cell.gd
+res://card_manager.tscn
+res://scenes/World.tscn
 res://Player.gd
-res://assets/cards/cards.json
-res://entities/Enemy.gd
-res://scripts/Events.gd

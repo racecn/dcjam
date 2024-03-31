@@ -77,10 +77,13 @@ func _process(delta):
 			playerAudioPlayer.play()
 		elif Input.is_action_just_pressed("move_backward") and not ray_back.is_colliding():
 			direction += camera.global_transform.basis.z
+			playerAudioPlayer.play()
 		elif Input.is_action_just_pressed("move_left") and not ray_left.is_colliding():
 			direction -= camera.global_transform.basis.x
+			playerAudioPlayer.play()
 		elif Input.is_action_just_pressed("move_right") and not ray_right.is_colliding():
 			direction += camera.global_transform.basis.x
+			playerAudioPlayer.play()
 
 		# Snap to the next cell if a movement key was pressed
 		if direction != Vector3.ZERO:

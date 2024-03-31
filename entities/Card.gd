@@ -12,7 +12,7 @@ var player: Node
 
 @onready var nameLabel: Label = $Name
 @onready var sprite: Sprite2D = $Sprite2D
-@onready var audio: AudioStreamPlayer3D = $AudioStreamPlayer3D
+@onready var audio: AudioStreamPlayer = $AudioStreamPlayer
 var pickup_stream = load("res://assets/sound/Card Sounds/CardPlayDry_7.wav")
 var setdown_stream = load("res://assets/sound/Card Sounds/CardDiscardDry_5.wav")
 
