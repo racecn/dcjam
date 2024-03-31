@@ -20,7 +20,7 @@ var is_in_combat = false
 var health = 10
 var max_health = 10
 var mana = 5
-var maxMana = 5
+var max_mana = 5
 var orientation: int = 0  # 0: north, 1: east, 2: south, 3: west
 var grid_position: Vector2  # Grid position in 2D space
 
@@ -30,6 +30,7 @@ var grid_position: Vector2  # Grid position in 2D space
 @onready var ray_left: RayCast3D = $RayLeft
 @onready var ray_right: RayCast3D = $RayRight
 @onready var pause_popup = $PausePopup  # Adjust the path to your pause popup node
+var combatHandler
 
 # Camera
 @onready var camera: Camera3D = $Control/SubViewportContainer/SubViewport/Camera3D
@@ -47,6 +48,7 @@ signal combat_ended
 signal end_turn
 
 func _ready():
+	combatHandler = get_parent().get_node("CombatHandler")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	target_position = global_transform.origin
 	target_rotation_degrees = rotation_degrees.y
@@ -92,12 +94,13 @@ func _process(delta):
 			$MovementCooldownTimer.start()
 
 	# Check for turn input
-	if Input.is_action_just_pressed("turn_left"):
-		start_turning(-1)
-	elif Input.is_action_just_pressed("turn_right"):
-		start_turning(1)
-	elif Input.is_action_just_released("turn_left") or Input.is_action_just_released("turn_right"):
-		stop_turning()
+	if !GlobalVars.in_combat:
+		if Input.is_action_just_pressed("turn_left"):
+			start_turning(-1)
+		elif Input.is_action_just_pressed("turn_right"):
+			start_turning(1)
+		elif Input.is_action_just_released("turn_left") or Input.is_action_just_released("turn_right"):
+			stop_turning()
 
 	# Move towards the target position
 	global_transform.origin = global_transform.origin.lerp(target_position, speed * delta)
@@ -134,8 +137,7 @@ func _on_movement_cooldown_timer_timeout():
 func _input(event):
 	if event.is_action_pressed("pause"):  # Adjust the action name as needed
 		toggle_pause()
-	elif event.is_action_pressed("end_turn") and is_in_combat:
-		emit_signal("end_turn")
+
 
 func toggle_pause():
 	is_paused = !is_paused
@@ -157,3 +159,8 @@ func exit_combat():
 
 func _on_quit_button_pressed():
 	get_tree().quit(0)
+
+
+func _on_end_turn_pressed():
+	print("end turn pressed")
+	get_parent().get_node("CombatManager").end_turn()

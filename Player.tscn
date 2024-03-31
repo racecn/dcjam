@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://uvlq16xarry8" path="res://assets/textures/Mana.png" id="8_vji2m"]
 [ext_resource type="Texture2D" uid="uid://cpurqaepm2dpy" path="res://assets/textures/Grass.png" id="8_wht7f"]
 [ext_resource type="Texture2D" uid="uid://c7s61cgm5etqw" path="res://assets/textures/DirtPath.png" id="9_0hqsn"]
-[ext_resource type="PackedScene" uid="uid://cmgveewxmtslk" path="res://card_manager.tscn" id="12_jrgwo"]
+[ext_resource type="Texture2D" uid="uid://dfscn7h0dqkvc" path="res://assets/textures/cards/Slash.png" id="12_d3ekr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cucvd"]
 
@@ -187,6 +187,23 @@ offset_right = 1152.0
 offset_bottom = 125.0
 texture = ExtResource("7_1kggi")
 
+[node name="EndTurn" type="TextureButton" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.825
+anchor_top = 0.741
+anchor_right = 0.941
+anchor_bottom = 0.956
+offset_left = -0.400024
+offset_top = 12.832
+offset_right = -6.0321
+offset_bottom = 1.51196
+action_mode = 0
+texture_normal = ExtResource("12_d3ekr")
+texture_pressed = ExtResource("12_d3ekr")
+texture_hover = ExtResource("12_d3ekr")
+texture_disabled = ExtResource("12_d3ekr")
+
 [node name="PausePopup" type="Control" parent="."]
 visible = false
 layout_mode = 3
@@ -227,8 +244,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.495, 0)
 visible = false
 shape = SubResource("BoxShape3D_cucvd")
 
-[node name="CardManager" parent="." instance=ExtResource("12_jrgwo")]
-texture_filter = 2
-
 [connection signal="timeout" from="MovementCooldownTimer" to="." method="_on_movement_cooldown_timer_timeout"]
+[connection signal="pressed" from="Control/EndTurn" to="." method="_on_end_turn_pressed"]
 [connection signal="pressed" from="PausePopup/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

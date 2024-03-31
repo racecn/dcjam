@@ -24,12 +24,17 @@ var is_hovered: bool = false
 var target_position: Vector2
 var card_handler
 var is_in_hand = false
-var hand_idx
+var hand_idx = -1
 
 
 signal card_mouse_entered(pos)
 signal card_mouse_exited
 signal card_marker_enabled(pos)
+
+
+func set_hand_position(position: int):
+	print("set hand post ", position)
+	hand_idx = position
 
 func _process(delta):
 	if dragging:
@@ -76,23 +81,23 @@ func update_card_visuals():
 		if sprite:
 			sprite.texture = texture
 		else:
-			print("Sprite is Nil")
-	print("Card name passed to update visuals ", cardname)
+			pass
+
 	if nameLabel:
 		nameLabel.text = cardname
 	else:
-		print("NameLabel is Nil")
+		pass
 
 func _on_mouse_entered():
 	is_hovered = true
 	var affected_cells = calculate_affected_cells()
-	print("Affected cells ", affected_cells)
+
 	emit_signal("card_mouse_entered", affected_cells)  # Emit signal with the necessary data
 
 func _on_mouse_exited():
 	is_hovered = false
 	scale = original_scale  # Reset to original scale
-	print("Emit to turn off marker")
+
 	emit_signal("card_mouse_exited")  # Emit signal without data
 
 func get_player_orientation() -> int:
@@ -157,7 +162,9 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 			var hand_container = get_parent()
 			var mouse_position = hand_container.get_global_mouse_position()
 			if not hand_container.get_rect().has_point(mouse_position):
-				print("Mouse outside hand container") 
+				print("card effects : ", effects)
 				card_handler.play_card(hand_idx)
+				print("playing card in pos, ", hand_idx)
+				hand_idx = -1
 	elif dragging and event is InputEventMouseMotion:
 		target_position = get_global_mouse_position() + drag_offset  # Update target position based on the offset

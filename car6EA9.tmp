@@ -1,8 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://cmgveewxmtslk"]
+[gd_scene load_steps=2 format=3 uid="uid://cmgveewxmtslk"]
 
 [ext_resource type="Script" path="res://scripts/CardManager.gd" id="1_0l2dp"]
-[ext_resource type="AudioStream" uid="uid://bpv604a0veyl0" path="res://assets/sound/Attack Sounds/Slash.wav" id="2_rlom4"]
-[ext_resource type="AudioStream" uid="uid://cguvgduptamt3" path="res://assets/sound/Monster Sounds/Slime/SlimeAttack_1.wav" id="3_ev54o"]
 
 [node name="CardManager" type="Control"]
 layout_mode = 3
@@ -16,6 +14,7 @@ offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_0l2dp")
+position_step = null
 
 [node name="HandContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -26,11 +25,3 @@ offset_left = 255.0
 offset_right = -228.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="card_sound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_rlom4")
-volume_db = -23.048
-
-[node name="mana_sound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_ev54o")
-volume_db = -10.91

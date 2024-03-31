@@ -19,15 +19,16 @@ signal card_marker_disabled
 
 func _ready():
 	
-	print("Checking marker node...")
+	#print("Checking marker node...")
 	marker = get_node_or_null("MeshInstance3D")
 	if marker:
-		print("Marker node found!")
+		#print("Marker node found!")
 		marker.visible = false
 	else:
-		print("Marker node is null or has been freed.")
+		#print("Marker node is null or has been freed.")
+		pass
 
-	print("mygrid pos ", grid_position)
+	#print("mygrid pos ", grid_position)
 	update_grid_position()
 	add_to_group("cells")
 

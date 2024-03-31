@@ -45,7 +45,7 @@ func _process(delta: float):
 func generate_map():
 	print(Map)
 	if not Map is PackedScene:
-		print("Map object not found in PackedScene")
+		
 		return
 
 	var map_instance = Map.instantiate()
@@ -54,7 +54,7 @@ func generate_map():
 	var detail_map = map_instance.get_detailmap()  # Assuming DetailMap is the node containing the detail map tilemap
 
 	if tileMap:
-		print("TileMap found")
+		
 		var used_tiles = tileMap.get_used_cells(0)
 		for tile in used_tiles:
 			var cell_instance = Cell.instantiate()  # Always create a normal cell
@@ -70,20 +70,23 @@ func generate_map():
 
 			elif source_id == 0:  # cell
 				# Perform actions for normal cell
-				print("Cell created at:", cell_instance.position)
+				#print("Cell created at:", cell_instance.position)
+				pass
 
 		for cell_instance in cells:
 			cell_instance.update_faces(used_tiles, tileMap)
 
 	else:
-		print("TileMap node not found in the instanced map")
+		#print("TileMap node not found in the instanced map")
+		pass
 	
 		
 	if not detail_map:
-		print("DetailMap node not found")
+		#print("DetailMap node not found")
 		return
 	else:
-		print("Detail map collected")
+		#print("Detail map collected")
+		pass
 
 	# Iterate over each tile in the detail map
 	# Determine the atlas coordinate
@@ -92,28 +95,29 @@ func generate_map():
 	for tile_pos in used_detail_tiles:
 		var tile_id = detail_map.get_cell_atlas_coords(0, tile_pos, false)  # Assuming detail map is on layer 0
 		if tile_id != Vector2i(-1, -1):
-			print("Checking tile at:", tile_pos, "Detail ID:", tile_id)
+			#print("Checking tile at:", tile_pos, "Detail ID:", tile_id)
+			pass
 
 		if tile_id == Vector2i(0, 0):
 			var detail_instance = Detail.instantiate()  # Assuming Detail is the scene for the detail object
 			add_child(detail_instance)
 			# Convert tile position to world position using the new map_to_world function
 			detail_instance.position = map_to_world(tile_pos, Vector2(1, 1), Vector2(4, 4))
-			print("Detail instance created at:", detail_instance.position)
+			#print("Detail instance created at:", detail_instance.position)
 		elif tile_id == Vector2i(1,0):
 			var detail_instance = Enemy.instantiate()  # Assuming Detail is the scene for the detail object
 			add_child(detail_instance)
 			# Convert tile position to world position using the new map_to_world function
 			detail_instance.position = map_to_world(tile_pos, Vector2(1, 1), Vector2(4, 4))
 			detail_instance.position.y = 0.5
-			print("enemy instance created at:", detail_instance.position)
+			#print("enemy instance created at:", detail_instance.position)
 		elif tile_id == Vector2i(2, 0):
 			var detail_instance = Torch.instantiate()  # Assuming Detail is the scene for the detail object
 			add_child(detail_instance)
 			# Convert tile position to world position using the new map_to_world function
 			detail_instance.position = map_to_world(tile_pos, Vector2(1, 1), Vector2(4, 4))
 			detail_instance.position.y = 0.5
-			print("Detail instance created at:", detail_instance.position)
+			#print("Detail instance created at:", detail_instance.position)
 		elif tile_id == Vector2i(1, 0):
 			pass
 
@@ -128,7 +132,7 @@ func map_to_world(detail_pos: Vector2, cell_size: Vector2, detail_scale: Vector2
 	var offset_x = (cell_size.x / detail_scale.x) / 2
 	var offset_z = (cell_size.y / detail_scale.y) / 2
 	# Set the Y-coordinate to a fixed height, e.g., 0.1 units above the ground
-	print("Detail pos: " , Vector3(world_x + offset_x, 0.1, world_z + offset_z))
+	#print("Detail pos: " , Vector3(world_x + offset_x, 0.1, world_z + offset_z))
 	return Vector3(world_x + offset_x, 0.1, world_z + offset_z)
 
 
