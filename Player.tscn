@@ -1,9 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://focw42gin5w6"]
+[gd_scene load_steps=15 format=3 uid="uid://focw42gin5w6"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_5scwy"]
 [ext_resource type="PackedScene" uid="uid://bagvryoswmavp" path="res://scenes/Minimap.tscn" id="2_p4h6q"]
 [ext_resource type="Environment" uid="uid://b7cjtkm44887y" path="res://environment.tres" id="2_y84fs"]
-[ext_resource type="AudioStream" uid="uid://cofkvx0m86nkx" path="res://assets/sound/music/Track2.wav" id="4_ghit1"]
 [ext_resource type="Texture2D" uid="uid://bk3h0javktg5" path="res://UI/UIBorder_BottomLeft.png" id="5_12cjs"]
 [ext_resource type="AudioStream" uid="uid://dbeexg1i7b6wn" path="res://assets/sound/Footsteps/Footstep_27.wav" id="5_cthpd"]
 [ext_resource type="Texture2D" uid="uid://c72aqjir0bf13" path="res://UI/UI Background.png" id="6_38n3a"]
@@ -116,15 +115,9 @@ current = true
 
 [node name="Minimap" parent="Control/SubViewportContainer/SubViewport/Camera3D" instance=ExtResource("2_p4h6q")]
 
-[node name="MusicPlayer" type="AudioStreamPlayer3D" parent="Control/SubViewportContainer/SubViewport/Camera3D"]
-process_mode = 3
-stream = ExtResource("4_ghit1")
-autoplay = true
-bus = &"Music"
-doppler_tracking = 2
-
 [node name="playerAudioPlayer" type="AudioStreamPlayer3D" parent="Control/SubViewportContainer/SubViewport/Camera3D"]
 stream = ExtResource("5_cthpd")
+bus = &"Player"
 
 [node name="BoxContainer" type="NinePatchRect" parent="Control"]
 texture_filter = 1
@@ -225,11 +218,11 @@ texture_normal = ExtResource("8_wht7f")
 layout_mode = 2
 texture_normal = ExtResource("9_0hqsn")
 
-[node name="PlayerHB" type="Area3D" parent="."]
+[node name="PlayerArea" type="Area3D" parent="."]
 visible = false
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerHB"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.495, 0)
 visible = false
 shape = SubResource("BoxShape3D_cucvd")

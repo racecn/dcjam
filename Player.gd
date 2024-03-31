@@ -18,7 +18,7 @@ var can_move = true
 var is_paused = false
 var is_in_combat = false
 var health = 10
-var maxHealth = 10
+var max_health = 10
 var mana = 5
 var maxMana = 5
 var orientation: int = 0  # 0: north, 1: east, 2: south, 3: west
@@ -36,7 +36,6 @@ var grid_position: Vector2  # Grid position in 2D space
 # Timer for continuous turning
 @onready var turn_timer: Timer = $TurnTimer
 # Audio
-@onready var musicPlayer: AudioStreamPlayer3D = $Control/SubViewportContainer/SubViewport/Camera3D/MusicPlayer
 @onready var playerAudioPlayer: AudioStreamPlayer3D = $Control/SubViewportContainer/SubViewport/Camera3D/playerAudioPlayer
 
 @onready var healthBar: TextureProgressBar = $Control/ProgressBar
@@ -73,15 +72,16 @@ func _process(delta):
 		var direction = Vector3.ZERO
 
 		# Get input for movement
-		if Input.is_action_just_pressed("move_forward") and not ray_forward.is_colliding():
-			direction -= camera.global_transform.basis.z
-			playerAudioPlayer.play()
-		elif Input.is_action_just_pressed("move_backward") and not ray_back.is_colliding():
-			direction += camera.global_transform.basis.z
-		elif Input.is_action_just_pressed("move_left") and not ray_left.is_colliding():
-			direction -= camera.global_transform.basis.x
-		elif Input.is_action_just_pressed("move_right") and not ray_right.is_colliding():
-			direction += camera.global_transform.basis.x
+		if !GlobalVars.in_combat:
+			if Input.is_action_just_pressed("move_forward") and not ray_forward.is_colliding():
+				direction -= camera.global_transform.basis.z
+				playerAudioPlayer.play()
+			elif Input.is_action_just_pressed("move_backward") and not ray_back.is_colliding():
+				direction += camera.global_transform.basis.z
+			elif Input.is_action_just_pressed("move_left") and not ray_left.is_colliding():
+				direction -= camera.global_transform.basis.x
+			elif Input.is_action_just_pressed("move_right") and not ray_right.is_colliding():
+				direction += camera.global_transform.basis.x
 
 		# Snap to the next cell if a movement key was pressed
 		if direction != Vector3.ZERO:

@@ -1,81 +1,91 @@
 extends Node
 
-enum CombatState { IDLE, PLAYER_TURN, ENEMY_TURN }
-var combat_state = CombatState.IDLE
+var card_manager
+enum CombatState { PLAYER_TURN, ENEMY_TURN }
+var combat_state = CombatState.PLAYER_TURN
 var player
 var enemy
+var turn_number = 1
+@onready var music = $"../Music"
 
-signal combat_started
-signal combat_ended
-signal turn_transition(from, to)
+enum EnemyType {
+	SLIME,
+	GHOUL,
+	GOLEM
+}
+
+
+var attacks = {
+	EnemyType.SLIME: [{"name": "Acid Splash", "damage": 5}],
+	EnemyType.GHOUL: [{"name": "Bite", "damage": 10}],
+	EnemyType.GOLEM: [{"name": "Rock Throw", "damage": 15}]
+}
+
+var animation_player: AnimationPlayer
+var current_enemy = null
+
+# Dictionary to store status effects and their durations
+var status_effects = {}
 
 func _ready():
-	# It's safe to get nodes in the scene tree within _ready, 
-	# as it is called when the node is added to the active scene.
-	player = get_parent().get_node("Player")
-	enemy = get_parent().get_node("Enemy")
+	animation_player = get_node("AnimationPlayer")
+	card_manager = get_parent().get_node("CardManager")
 
-func initialize_combat():
-	# Position the player and enemy
-	player.position = Vector2(100, 200)  # Adjust these values as needed
-	enemy.position = Vector2(300, 200)  # Adjust these values as needed
+func _process(delta):
+	if Input.is_action_just_pressed("end_turn") and combat_state == CombatState.PLAYER_TURN:
+		start_enemy_turn()
 
-	# Reset health
-	player.health = player.max_health
-	enemy.health = enemy.max_health
+func start_combat_with_enemy(enemyTypeStr: String):
+	music.play()
+	# Set can_move to false for all enemies
+	GlobalVars.in_combat = true
 
-	# Reset any other necessary states
+	var enemyType = match_enemy_type(enemyTypeStr)
+	if enemyType == null:
+		print("Error: Invalid enemy type string")
+		return
 
-
-func start_combat():
-	initialize_combat()
-	combat_state = CombatState.PLAYER_TURN
-	emit_signal("combat_started")
-	emit_signal("player_turn")
-	player.draw_cards(player.starting_hand_size)
-
-func _on_player_turn():
+	# Start combat with the specified enemy type
+	print("Combat started with", enemyTypeStr)
 	if combat_state != CombatState.PLAYER_TURN:
 		return
-	player.enable_card_selection(true)
+	
+	combat_state = CombatState.ENEMY_TURN
+	current_enemy = enemyType
 
-func _on_enemy_turn():
-	if combat_state != CombatState.ENEMY_TURN:
-		return
-	player.enable_card_selection(false)
-	enemy.take_action()  # Implement this method in the enemy's script
 
-func _on_player_end_turn():
-	if combat_state == CombatState.PLAYER_TURN:
-		combat_state = CombatState.ENEMY_TURN
-		emit_signal("turn_transition", "player", "enemy")
-		emit_signal("enemy_turn")
 
-func _on_enemy_action_complete():
-	if combat_state == CombatState.ENEMY_TURN:
-		combat_state = CombatState.PLAYER_TURN
-		emit_signal("turn_transition", "enemy", "player")
-		emit_signal("player_turn")
+func match_enemy_type(enemyTypeStr: String) -> EnemyType:
+	match enemyTypeStr:
+		"SLIME":
+			return EnemyType.SLIME
+		"GHOUL":
+			return EnemyType.GHOUL
+		"GOLEM":
+			return EnemyType.GOLEM
+		_:
+			return EnemyType.SLIME
 
-func end_combat():
-	combat_state = CombatState.IDLE
-	emit_signal("combat_ended")
-	player.discard_hand()
-	cleanup_combat()
+func start_enemy_turn():
+	match current_enemy:
+		EnemyType.SLIME:
+			var attack = attacks[EnemyType.SLIME][randi() % attacks[EnemyType.SLIME].size()]
+			apply_damage_to_player(attack["damage"])
+		EnemyType.GHOUL:
+			var attack = attacks[EnemyType.GHOUL][randi() % attacks[EnemyType.GHOUL].size()]
+			apply_damage_to_player(attack["damage"])
+		EnemyType.GOLEM:
+			var attack = attacks[EnemyType.GOLEM][randi() % attacks[EnemyType.GOLEM].size()]
+			apply_damage_to_player(attack["damage"])
+	
+	turn_number += 1
+	start_player_turn()
+	
+func start_player_turn():
+	card_manager.handle_start_of_turn()
 
-func cleanup_combat():
-	# Remove temporary effects
-	player.remove_temporary_effects()
-	enemy.remove_temporary_effects()
-
-	# Update game state or reset variables if necessary
-func deal_damage_to_player(damage: int):
-	# Access the player node and reduce health.
-	var player = get_node("/root/World/Player") # Adjust the path to the player node
+func apply_damage_to_player(damage):
 	player.health -= damage
 	if player.health <= 0:
-		# Handle player defeat if needed.
-		player.emit_signal("defeated")
-
-# In the Player script, emit "end_turn" signal when the player ends their turn
-# In the Enemy script, emit "enemy_action_complete" signal when the enemy completes their action
+		player.health = 0
+		emit_signal("player_defeated")

@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=3 uid="uid://bt00rkm162ial"]
+
+[ext_resource type="Script" path="res://entities/Enemy.gd" id="1_gkhkg"]
+[ext_resource type="Texture2D" uid="uid://b1p7c7qgvr45w" path="res://assets/textures/slime/Idle01.png" id="2_nhile"]
+[ext_resource type="Texture2D" uid="uid://cuq38lgj67gru" path="res://assets/textures/gridnew.jpg" id="3_ku27w"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4yixv"]
+transparency = 1
+albedo_texture = ExtResource("2_nhile")
+texture_filter = 0
+billboard_mode = 2
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dekg5"]
+texture = ExtResource("3_ku27w")
+texture_region_size = Vector2i(4, 4)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_pw3h3"]
+tile_size = Vector2i(4, 4)
+sources/3 = SubResource("TileSetAtlasSource_dekg5")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4gfwl"]
+size = Vector3(0.775, 0.875, 0.755)
+
+[node name="Enemy" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.29, -0.5)
+script = ExtResource("1_gkhkg")
+enemy_type = null
+enemyType = null
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.164085, 0)
+exclude_parent = false
+target_position = Vector3(0, 0, -1)
+collision_mask = 2
+hit_from_inside = true
+hit_back_faces = false
+collide_with_areas = true
+collide_with_bodies = false
+debug_shape_thickness = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+material_override = SubResource("StandardMaterial3D_4yixv")
+billboard = 2
+texture_filter = 0
+texture = ExtResource("2_nhile")
+
+[node name="moveTimer" type="Timer" parent="."]
+
+[node name="TileMap" type="TileMap" parent="."]
+top_level = true
+position = Vector2(46, 32)
+tile_set = SubResource("TileSet_pw3h3")
+rendering_quadrant_size = 1
+format = 2
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="Area3D" type="Area3D" parent="." groups=["player"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_4gfwl")
+
+[connection signal="timeout" from="moveTimer" to="." method="_on_move_timer_timeout"]
+[connection signal="area_entered" from="Area3D" to="." method="_on_area_entered"]
+[connection signal="area_shape_entered" from="Area3D" to="." method="_on_area_3d_area_shape_entered"]

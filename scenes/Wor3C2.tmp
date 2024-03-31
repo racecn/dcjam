@@ -1,0 +1,23 @@
+[gd_scene load_steps=7 format=3 uid="uid://bn5xu5v2onahg"]
+
+[ext_resource type="Script" path="res://scenes/World.gd" id="1_hadvo"]
+[ext_resource type="PackedScene" uid="uid://focw42gin5w6" path="res://Player.tscn" id="2_g271l"]
+[ext_resource type="PackedScene" uid="uid://cmg7xofkcuux7" path="res://scenes/Map.tscn" id="2_j21jd"]
+[ext_resource type="Environment" uid="uid://b7cjtkm44887y" path="res://environment.tres" id="3_dlpsk"]
+[ext_resource type="PackedScene" uid="uid://cmgveewxmtslk" path="res://card_manager.tscn" id="5_lv7uq"]
+[ext_resource type="Script" path="res://scenes/CombatHandler.gd" id="5_xvs60"]
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_hadvo")
+Map = ExtResource("2_j21jd")
+
+[node name="Player" parent="." instance=ExtResource("2_g271l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("3_dlpsk")
+
+[node name="CombatHandler" type="Node" parent="."]
+script = ExtResource("5_xvs60")
+
+[node name="CardManager" parent="." instance=ExtResource("5_lv7uq")]

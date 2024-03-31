@@ -28,8 +28,6 @@ func _ready():
 		print("Marker node is null or has been freed.")
 
 	print("mygrid pos ", grid_position)
-	connect("card_marker_enabled", on_enable_marker)
-	connect("card_marker_disabled", on_disable_marker)
 	update_grid_position()
 	add_to_group("cells")
 
@@ -52,10 +50,9 @@ func update_faces(cell_list, tileMap) -> void:
 			if face_and_col["col"]:
 				face_and_col["col"].queue_free()
 
-func on_enable_marker():
-	print("marker toggled on")
-	marker.visible = true
+func on_enable_marker(affected_cells):
+	if grid_position in affected_cells:
+		marker.visible = true
 
 func on_disable_marker():
-	if marker and marker.visible == true:
-		marker.visible = false
+	marker.visible = false

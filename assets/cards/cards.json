@@ -46,7 +46,7 @@
 	  ],
 	  "area_of_effect": {
 		"shape": [
-		  [1, 0]
+		  [0,1]
 		],
 		"player_position": {
 		  "x": 0,

@@ -28,9 +28,7 @@ enum EnemyType {
 
 @export var enemy_type = EnemyType.SLIME
 
-signal combat_end
-signal combat_start
-signal enter_combat(EnemyType)
+var CombatHandler
 
 @export var enemyType: EnemyType
 # Variables to track the current direction, state, target position, and movement properties
@@ -51,7 +49,7 @@ var straight_path_length = 0
 var last_direction = null
 var hallway_threshold = 5
 var current_patrol_point_index = 0
-var combat_handler
+var combat_manager
 var current_path = [] 
 
 var health
@@ -160,8 +158,8 @@ func start_pathfinding_to(target_global_position: Vector3):
 
 # Initialization function
 func _ready():
-	combat_handler = get_parent().get_node("CombatHandler")
-	
+	CombatHandler = get_parent().get_node("CombatHandler")
+
 	match enemy_type:
 		EnemyType.SLIME:
 			max_health = 20
@@ -172,6 +170,7 @@ func _ready():
 		EnemyType.GOLEM:
 			max_health = 50
 			move_speed = 1.5
+
 	match enemy_type:
 		EnemyType.SLIME:
 			sprite.texture = preload("res://assets/textures/slime/Idle01.png")
@@ -179,13 +178,13 @@ func _ready():
 			sprite.texture = preload("res://assets/textures/ghoul/Idle_Animation/0001.png")
 		EnemyType.GOLEM:
 			sprite.texture = preload("res://assets/textures/golem/Golem_Body.png")
-	
+
 	target_position = global_transform.origin
 	set_process(true)
 	moveTimer.wait_time = update_interval
 	moveTimer.start()
-	connect("combat_start", handle_combat_start)
-	connect("combat_end", handle_combat_end)
+
+
 
 func handle_combat_start():
 	pass
@@ -195,26 +194,27 @@ func handle_combat_end():
 
 # Process function to handle movement and state updates
 func _process(delta: float):
-	tile_map.update_internals()
-	match current_state:
-		State.EXPLORING:
-			if is_moving:
-				move_towards_target(delta)
-			else:
-				start_exploring_movement()
-		State.MOVING_TO_TARGET:
-			if is_moving:
-				move_towards_target(delta)
-			else:
-				if current_path.size() > 0:
-					current_path.pop_front()  # Remove the first element of the path
+	if !GlobalVars.in_combat:
+		tile_map.update_internals()
+		match current_state:
+			State.EXPLORING:
+				if is_moving:
+					move_towards_target(delta)
+				else:
+					start_exploring_movement()
+			State.MOVING_TO_TARGET:
+				if is_moving:
+					move_towards_target(delta)
+				else:
 					if current_path.size() > 0:
-						target_position = to_world_position(current_path[0])
-						is_moving = true
-					else:
-						# Reached the target, switch back to exploring
-						current_state = State.EXPLORING
-						random_moves_made = 0
+						current_path.pop_front()  # Remove the first element of the path
+						if current_path.size() > 0:
+							target_position = to_world_position(current_path[0])
+							is_moving = true
+						else:
+							# Reached the target, switch back to exploring
+							current_state = State.EXPLORING
+							random_moves_made = 0
 
 # Function to check if the entity can move to a specific grid position
 func can_move_to_grid_pos(grid_pos: Vector2) -> bool:
@@ -401,17 +401,33 @@ func update_tile_map(grid_pos: Vector2i):
 	
 	tile_map.update_internals()
 
+func enum_to_string(enemyType: EnemyType) -> String:
+	match enemyType:
+		EnemyType.SLIME:
+			return "SLIME"
+		EnemyType.GHOUL:
+			return "GHOUL"
+		EnemyType.GOLEM:
+			return "GOLEM"
+	return ""
 
 func _on_area_3d_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
-	if area.is_in_group("player"):
-		enter_combat.emit(enemyType)
+	print("area colid")
+	if area.get_name() == "PlayerArea":
+		print("player found")
+		if is_instance_valid(self):
+			CombatHandler.start_combat_with_enemy(enum_to_string(enemy_type))
+
+
+
 
 func take_action():
 	var attack = choose_random_attack()
 	perform_attack(attack)
+	
 	emit_signal("enemy_action_complete")  # Signal that the enemy has completed its action.
 
 # The perform_attack method uses the combat_handler to apply damage to the player.
 func perform_attack(attack):
 	# Call the method in CombatHandler to apply damage to the player.
-	combat_handler.deal_damage_to_player(attack.damage)
+	combat_manager.deal_damage_to_player(attack.damage)

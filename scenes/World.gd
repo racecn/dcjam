@@ -106,7 +106,7 @@ func generate_map():
 			# Convert tile position to world position using the new map_to_world function
 			detail_instance.position = map_to_world(tile_pos, Vector2(1, 1), Vector2(4, 4))
 			detail_instance.position.y = 0.5
-			print("Detail instance created at:", detail_instance.position)
+			print("enemy instance created at:", detail_instance.position)
 		elif tile_id == Vector2i(2, 0):
 			var detail_instance = Torch.instantiate()  # Assuming Detail is the scene for the detail object
 			add_child(detail_instance)

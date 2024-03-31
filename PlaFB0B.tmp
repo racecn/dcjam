@@ -1,0 +1,241 @@
+[gd_scene load_steps=16 format=3 uid="uid://focw42gin5w6"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_5scwy"]
+[ext_resource type="PackedScene" uid="uid://bagvryoswmavp" path="res://scenes/Minimap.tscn" id="2_p4h6q"]
+[ext_resource type="Environment" uid="uid://b7cjtkm44887y" path="res://environment.tres" id="2_y84fs"]
+[ext_resource type="AudioStream" uid="uid://cofkvx0m86nkx" path="res://assets/sound/music/Track2.wav" id="4_ghit1"]
+[ext_resource type="Texture2D" uid="uid://bk3h0javktg5" path="res://UI/UIBorder_BottomLeft.png" id="5_12cjs"]
+[ext_resource type="AudioStream" uid="uid://dbeexg1i7b6wn" path="res://assets/sound/Footsteps/Footstep_27.wav" id="5_cthpd"]
+[ext_resource type="Texture2D" uid="uid://c72aqjir0bf13" path="res://UI/UI Background.png" id="6_38n3a"]
+[ext_resource type="Texture2D" uid="uid://b5cv0wqsugka3" path="res://UI/UIBorder_BottomRight.png" id="6_jpxsi"]
+[ext_resource type="Texture2D" uid="uid://jj8ocmc5stsv" path="res://assets/textures/Healthbar.png" id="6_l2wt2"]
+[ext_resource type="Texture2D" uid="uid://cy0nuju8tgo34" path="res://UI/UIBorder_TopRight.png" id="7_1kggi"]
+[ext_resource type="Texture2D" uid="uid://uvlq16xarry8" path="res://assets/textures/Mana.png" id="8_vji2m"]
+[ext_resource type="Texture2D" uid="uid://cpurqaepm2dpy" path="res://assets/textures/Grass.png" id="8_wht7f"]
+[ext_resource type="Texture2D" uid="uid://c7s61cgm5etqw" path="res://assets/textures/DirtPath.png" id="9_0hqsn"]
+[ext_resource type="PackedScene" uid="uid://cmgveewxmtslk" path="res://card_manager.tscn" id="12_jrgwo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cucvd"]
+
+[node name="Player" type="Node3D" groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, -0.5)
+script = ExtResource("1_5scwy")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+omni_range = 3.245
+omni_attenuation = 0.435275
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="RayForward" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.164085, 0)
+exclude_parent = false
+target_position = Vector3(0, 0, -1)
+collision_mask = 2
+hit_from_inside = true
+hit_back_faces = false
+collide_with_areas = true
+collide_with_bodies = false
+debug_shape_thickness = 5
+
+[node name="RayBack" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.164085, 0)
+exclude_parent = false
+target_position = Vector3(0, 0, 1)
+collision_mask = 2
+hit_from_inside = true
+hit_back_faces = false
+collide_with_areas = true
+collide_with_bodies = false
+debug_shape_custom_color = Color(0, 1, 0, 1)
+
+[node name="RayRight" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000561774, 0.165698, -0.00063169)
+exclude_parent = false
+target_position = Vector3(1, 0, 0)
+collision_mask = 2
+hit_from_inside = true
+hit_back_faces = false
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="RayLeft" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.164085, 0)
+exclude_parent = false
+target_position = Vector3(-1, 0, 0)
+collision_mask = 2
+hit_from_inside = true
+hit_back_faces = false
+collide_with_areas = true
+collide_with_bodies = false
+debug_shape_custom_color = Color(0.960784, 0, 0.501961, 1)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.105512, 0.599153)
+light_color = Color(0.792157, 0.541176, 0.211765, 1)
+spot_range = 2.185
+spot_attenuation = 4.5948
+spot_angle_attenuation = 12.4232
+
+[node name="MovementCooldownTimer" type="Timer" parent="."]
+wait_time = 0.235
+
+[node name="TurnTimer" type="Timer" parent="."]
+wait_time = 0.581
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.834
+anchor_bottom = 0.679
+offset_right = 0.119995
+offset_bottom = 0.0399933
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Control/SubViewportContainer"]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+audio_listener_enable_3d = true
+size = Vector2i(960, 440)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Control/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, -0.275)
+environment = ExtResource("2_y84fs")
+doppler_tracking = 2
+current = true
+
+[node name="Minimap" parent="Control/SubViewportContainer/SubViewport/Camera3D" instance=ExtResource("2_p4h6q")]
+
+[node name="MusicPlayer" type="AudioStreamPlayer3D" parent="Control/SubViewportContainer/SubViewport/Camera3D"]
+process_mode = 3
+stream = ExtResource("4_ghit1")
+autoplay = true
+bus = &"Music"
+doppler_tracking = 2
+
+[node name="playerAudioPlayer" type="AudioStreamPlayer3D" parent="Control/SubViewportContainer/SubViewport/Camera3D"]
+stream = ExtResource("5_cthpd")
+
+[node name="BoxContainer" type="NinePatchRect" parent="Control"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.215
+anchor_bottom = 0.662
+offset_left = 902.0
+offset_right = 902.32
+offset_bottom = 0.0239563
+texture = ExtResource("6_38n3a")
+
+[node name="StatusDisplay" type="TextureRect" parent="Control"]
+layout_mode = 0
+offset_left = 833.0
+offset_top = 25.0
+offset_right = 897.0
+offset_bottom = 89.0
+texture = ExtResource("8_wht7f")
+
+[node name="ProgressBar" type="TextureProgressBar" parent="Control"]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 14.0
+offset_right = 790.0
+offset_bottom = 50.0
+max_value = 10.0
+value = 9.0
+fill_mode = 1
+nine_patch_stretch = true
+texture_progress = ExtResource("6_l2wt2")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Control"]
+texture_filter = 1
+layout_mode = 0
+offset_top = 377.0
+offset_right = 271.0
+offset_bottom = 648.0
+texture = ExtResource("5_12cjs")
+
+[node name="Mana" type="TextureProgressBar" parent="Control"]
+layout_mode = 0
+offset_left = 869.0
+offset_top = 257.0
+offset_right = 909.0
+offset_bottom = 293.0
+max_value = 5.0
+value = 5.0
+fill_mode = 3
+nine_patch_stretch = true
+texture_progress = ExtResource("8_vji2m")
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 757.0
+offset_top = 243.0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("6_jpxsi")
+
+[node name="TextureRect2" type="TextureRect" parent="Control"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 516.0
+offset_right = 1152.0
+offset_bottom = 125.0
+texture = ExtResource("7_1kggi")
+
+[node name="PausePopup" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchor_left = 0.126
+anchor_top = 0.179
+anchor_right = 0.816
+anchor_bottom = 0.833
+offset_left = -145.152
+offset_top = -115.992
+offset_right = -900.032
+offset_bottom = -499.784
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PausePopup"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 4.625
+anchor_top = 3.742
+anchor_right = 20.268
+anchor_bottom = 13.408
+offset_top = 1.31999
+offset_right = 6.27991
+offset_bottom = -10.3201
+
+[node name="TextureButton" type="TextureButton" parent="PausePopup/VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("8_wht7f")
+
+[node name="QuitButton" type="TextureButton" parent="PausePopup/VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("9_0hqsn")
+
+[node name="PlayerHB" type="Area3D" parent="."]
+visible = false
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerHB"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.495, 0)
+visible = false
+shape = SubResource("BoxShape3D_cucvd")
+
+[node name="CardManager" parent="." instance=ExtResource("12_jrgwo")]
+texture_filter = 2
+
+[connection signal="timeout" from="MovementCooldownTimer" to="." method="_on_movement_cooldown_timer_timeout"]
+[connection signal="pressed" from="PausePopup/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
