@@ -1,25 +1,25 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1711919910
-card_manager.tscn::PackedScene::5628776202731581184::1711916521::0::1::::<><>::res://scripts/CardManager.gd<>uid://bpv604a0veyl0::::res://assets/sound/Attack Sounds/Slash.wav<>uid://cguvgduptamt3::::res://assets/sound/Monster Sounds/Slime/SlimeAttack_1.wav
-default_bus_layout.tres::AudioBusLayout::9011823649627341189::1711869979::0::1::::<><>::
-environment.tres::Environment::4637173363766219860::1711899622::0::1::::<><>::
+::res://::1729663348
+card_manager.tscn::PackedScene::5628776202731581184::1729663263::0::1::::<><>::res://scripts/CardManager.gd<>uid://bpv604a0veyl0::::res://assets/sound/Attack Sounds/Slash.wav<>uid://cguvgduptamt3::::res://assets/sound/Monster Sounds/Slime/SlimeAttack_1.wav
+default_bus_layout.tres::AudioBusLayout::9011823649627341189::1711930001::0::1::::<><>::
+environment.tres::Environment::4637173363766219860::1729661355::0::1::::<><>::
 Globals.gd::GDScript::-1::1711862701::0::1::::Globals<>Node<>::
 icon.svg::CompressedTexture2D::8705596578880271386::1710900079::1710900085::1::::<><>::
-Player.gd::GDScript::-1::1711914067::0::1::::<>Node3D<>::
-Player.tscn::PackedScene::380007793369162475::1711916520::0::1::::<><>::res://Player.gd<>uid://bagvryoswmavp::::res://scenes/Minimap.tscn<>uid://b7cjtkm44887y::::res://environment.tres<>uid://bk3h0javktg5::::res://UI/UIBorder_BottomLeft.png<>uid://dbeexg1i7b6wn::::res://assets/sound/Footsteps/Footstep_27.wav<>uid://c72aqjir0bf13::::res://UI/UI Background.png<>uid://b5cv0wqsugka3::::res://UI/UIBorder_BottomRight.png<>uid://jj8ocmc5stsv::::res://assets/textures/Healthbar.png<>uid://cy0nuju8tgo34::::res://UI/UIBorder_TopRight.png<>uid://uvlq16xarry8::::res://assets/textures/Mana.png<>uid://cpurqaepm2dpy::::res://assets/textures/Grass.png<>uid://c7s61cgm5etqw::::res://assets/textures/DirtPath.png<>uid://dfscn7h0dqkvc::::res://assets/textures/cards/Slash.png
+Player.gd::GDScript::-1::1729663261::0::1::::<>Node3D<>::
+Player.tscn::PackedScene::380007793369162475::1729663263::0::1::::<><>::res://Player.gd<>uid://bagvryoswmavp::::res://scenes/Minimap.tscn<>uid://b7cjtkm44887y::::res://environment.tres<>uid://bk3h0javktg5::::res://UI/UIBorder_BottomLeft.png<>uid://dbeexg1i7b6wn::::res://assets/sound/Footsteps/Footstep_27.wav<>uid://c72aqjir0bf13::::res://UI/UI Background.png<>uid://b5cv0wqsugka3::::res://UI/UIBorder_BottomRight.png<>uid://jj8ocmc5stsv::::res://assets/textures/Healthbar.png<>uid://cy0nuju8tgo34::::res://UI/UIBorder_TopRight.png<>uid://uvlq16xarry8::::res://assets/textures/Mana.png<>uid://cpurqaepm2dpy::::res://assets/textures/Grass.png<>uid://c7s61cgm5etqw::::res://assets/textures/DirtPath.png
 README.md::TextFile::-1::1710900484::0::1::::<><>::
 Torch.gd::GDScript::-1::1711813362::0::1::::<>Node3D<>::
 Vars.gd::GDScript::-1::1711869577::0::1::::Vars<>Node<>::
 ::res://assets/::1711852200
 ::res://assets/cards/::1711853045
 cards.json::JSON::-1::1711853045::0::1::::<><>::
-::res://assets/materials/::1711899622
-Bricks2.tres::StandardMaterial3D::6476557158706705813::1711899622::0::1::::<><>::uid://ddx2dxpalkec4::::res://assets/textures/Sandstone/Bricks_Color.png<>uid://bkau4rs76kb56::::res://assets/textures/Sandstone/Bricks_AO.png
-Bricks.tres::StandardMaterial3D::5329424358049225019::1711899622::0::1::::<><>::uid://c4vgdfjqep5sq::::res://assets/textures/Sandstone/Bricks2_Color.png<>uid://bkau4rs76kb56::::res://assets/textures/Sandstone/Bricks_AO.png
+::res://assets/materials/::1729661355
+Bricks2.tres::StandardMaterial3D::6476557158706705813::1729661355::0::1::::<><>::uid://ddx2dxpalkec4::::res://assets/textures/Sandstone/Bricks_Color.png<>uid://bkau4rs76kb56::::res://assets/textures/Sandstone/Bricks_AO.png
+Bricks.tres::StandardMaterial3D::5329424358049225019::1729661355::0::1::::<><>::uid://c4vgdfjqep5sq::::res://assets/textures/Sandstone/Bricks2_Color.png<>uid://bkau4rs76kb56::::res://assets/textures/Sandstone/Bricks_AO.png
 Dirt.tres::StandardMaterial3D::5775522541133613503::1711174742::0::1::::<><>::uid://cc7qk1pe53bnw::::res://assets/textures/Dirt.png
-Grass.tres::StandardMaterial3D::823309184905031432::1711899622::0::1::::<><>::uid://cc7qk1pe53bnw::::res://assets/textures/Dirt.png
+Grass.tres::StandardMaterial3D::823309184905031432::1729661355::0::1::::<><>::uid://cc7qk1pe53bnw::::res://assets/textures/Dirt.png
 GrassPath.tres::StandardMaterial3D::5192993323252837838::1711829638::0::1::::<><>::uid://c7s61cgm5etqw::::res://assets/textures/DirtPath.png
-Rock.tres::StandardMaterial3D::5123355964401505672::1711899622::0::1::::<><>::uid://dygvs5pdgtjk3::::res://assets/textures/bark.png
+Rock.tres::StandardMaterial3D::5123355964401505672::1729661355::0::1::::<><>::uid://dygvs5pdgtjk3::::res://assets/textures/bark.png
 Sandstone.tres::StandardMaterial3D::5926023737222416102::1711829321::0::1::::<><>::uid://bfn5n50goqs2f::::res://assets/textures/Sandstone/Sandstone_Color.png<>uid://buggyj671k7sy::::res://assets/textures/Sandstone/Sandstone_AO.png
 Stones.tres::StandardMaterial3D::5334125611849815631::1711829321::0::1::::<><>::uid://n1lf8qkv37qc::::res://assets/textures/Sandstone/Stones_Color.png<>uid://bt0k2bqrp8nei::::res://assets/textures/Sandstone/Stones_AO.png
 ::res://assets/sound/::1711755920
@@ -234,30 +234,30 @@ SD_Anim_Frame_7.png::CompressedTexture2D::1366341659852774351::1711683914::17117
 ::res://assets/textures/UI/::1711590364
 Godot_v4.2.1-stable_win64_7o4sBCLUMK.png::CompressedTexture2D::6286971039974496064::1711590364::1711590364::1::::<><>::
 UIBasic.png::CompressedTexture2D::6919052803447923115::1711587564::1711587568::1::::<><>::
-::res://entities/::1711916521
-Card.gd::GDScript::-1::1711916239::0::1::::<>Control<>::
-Card.tscn::PackedScene::1401273002035471265::1711916520::0::1::::<><>::res://entities/Card.gd<>uid://qqis5dpcpc5q::::res://assets/sound/Card Sounds/CardPlayDry_2.wav
+::res://entities/::1729663323
+Card.gd::GDScript::-1::1729661355::0::1::::<>Control<>::
+Card.tscn::PackedScene::1401273002035471265::1729663263::0::1::::<><>::res://entities/Card.gd<>uid://qqis5dpcpc5q::::res://assets/sound/Card Sounds/CardPlayDry_2.wav
 Detail.gd::GDScript::-1::1711813361::0::1::::<>Node3D<>::
-Detail.gdshader::Shader::-1::1711916521::0::1::::<><>::
+Detail.gdshader::Shader::-1::1729663323::0::1::::<><>::
 Detail.tscn::PackedScene::296057110957227703::1711837424::0::1::::<><>::uid://dpgku703fhyqn::::res://assets/textures/key/0001.png<>res://entities/Detail.gd
-Enemy.gd::GDScript::-1::1711869782::0::1::::<>Node3D<>::
-Enemy.tscn::PackedScene::3773166984977727923::1711916520::0::1::::<><>::res://entities/Enemy.gd<>uid://b1p7c7qgvr45w::::res://assets/textures/slime/Idle01.png<>uid://cuq38lgj67gru::::res://assets/textures/gridnew.jpg
+Enemy.gd::GDScript::-1::1729662372::0::1::::<>Node3D<>::
+Enemy.tscn::PackedScene::3773166984977727923::1729663263::0::1::::<><>::res://entities/Enemy.gd<>uid://b1p7c7qgvr45w::::res://assets/textures/slime/Idle01.png<>uid://cuq38lgj67gru::::res://assets/textures/gridnew.jpg
 Torch.tscn::PackedScene::8099527046651794841::1711837424::0::1::::<><>::res://Torch.gd<>uid://bbf8tr8mmo427::::res://assets/textures/torch/SD_Anim_Frame_0.png<>uid://dtiw88e6ycn4l::::res://assets/textures/torch/SD_Anim_Frame_5.png
-::res://scenes/::1711916521
+::res://scenes/::1729663263
 Cell.gd::GDScript::-1::1711900478::0::1::::Cell<>Node3D<>::
-Cell.tscn::PackedScene::5877773395595893467::1711916521::0::1::::<><>::res://scenes/Cell.gd<>uid://ch6u3twr03nwl::::res://assets/materials/Bricks.tres<>uid://cyjj7knmpcws0::::res://assets/materials/Bricks2.tres<>uid://ly21t8ji52ns::::res://assets/materials/Grass.tres
-CombatHandler.gd::GDScript::-1::1711914049::0::1::::<>Node<>::
+Cell.tscn::PackedScene::5877773395595893467::1729663263::0::1::::<><>::res://scenes/Cell.gd<>uid://ch6u3twr03nwl::::res://assets/materials/Bricks.tres<>uid://cyjj7knmpcws0::::res://assets/materials/Bricks2.tres<>uid://ly21t8ji52ns::::res://assets/materials/Grass.tres
+CombatHandler.gd::GDScript::-1::1729662780::0::1::::<>Node<>::
 DoorCell.gd::GDScript::-1::1711852200::0::1::::DoorCell<>Cell<>::
 DoorCell.tscn::PackedScene::6270807956819207996::1711862845::0::1::::<><>::res://scenes/DoorCell.gd<>uid://ce816om3otqvg::::res://assets/materials/Rock.tres<>uid://ly21t8ji52ns::::res://assets/materials/Grass.tres
 Map.gd::GDScript::-1::1711813361::0::1::::<>Node3D<>::
-Map.tscn::PackedScene::5629478518104049854::1711916520::0::1::::<><>::res://scenes/Map.gd<>uid://cc7qk1pe53bnw::::res://assets/textures/Dirt.png<>uid://dygvs5pdgtjk3::::res://assets/textures/bark.png<>uid://gmnnw8f13tv3::::res://assets/textures/grid.jpg
+Map.tscn::PackedScene::5629478518104049854::1729663263::0::1::::<><>::res://scenes/Map.gd<>uid://cc7qk1pe53bnw::::res://assets/textures/Dirt.png<>uid://dygvs5pdgtjk3::::res://assets/textures/bark.png<>uid://gmnnw8f13tv3::::res://assets/textures/grid.jpg
 Minimap.gd::GDScript::-1::1711813361::0::1::::<>Node2D<>::
 Minimap.tscn::PackedScene::2400113648597313369::1711823155::0::1::::<><>::res://scenes/Minimap.gd<>uid://cmg7xofkcuux7::::res://scenes/Map.tscn
-World.gd::GDScript::-1::1711900449::0::1::::<>Node3D<>::
-World.tscn::PackedScene::3362240799708415324::1711916520::0::1::::<><>::res://scenes/World.gd<>uid://focw42gin5w6::::res://Player.tscn<>uid://cmg7xofkcuux7::::res://scenes/Map.tscn<>uid://b7cjtkm44887y::::res://environment.tres<>uid://cmgveewxmtslk::::res://card_manager.tscn<>res://scenes/CombatHandler.gd<>uid://bm576rytcmxdn::::res://assets/sound/music/Track4_BattleMusic.wav
-::res://scripts/::1711916520
+World.gd::GDScript::-1::1729662285::0::1::::<>Node3D<>::
+World.tscn::PackedScene::3362240799708415324::1729663263::0::1::::<><>::res://scenes/World.gd<>uid://focw42gin5w6::::res://Player.tscn<>uid://cmg7xofkcuux7::::res://scenes/Map.tscn<>uid://b7cjtkm44887y::::res://environment.tres<>uid://cmgveewxmtslk::::res://card_manager.tscn<>res://scenes/CombatHandler.gd<>uid://cguvgduptamt3::::res://assets/sound/Monster Sounds/Slime/SlimeAttack_1.wav<>uid://bm576rytcmxdn::::res://assets/sound/music/Track4_BattleMusic.wav
+::res://scripts/::1729661420
 Card.gd::GDScript::-1::1711842640::0::1::::Card<>Node<>::
-CardManager.gd::GDScript::-1::1711916520::0::1::::<>Node<>::
+CardManager.gd::GDScript::-1::1729661420::0::1::::<>Node<>::
 StaticData.gd::GDScript::-1::1711813362::0::1::::<>Node<>::
 ::res://UI/::1711825595
 UI Background.png::CompressedTexture2D::7074651621739773916::1711825595::1711825595::1::::<><>::

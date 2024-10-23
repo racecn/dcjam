@@ -1,119 +1,255 @@
 extends Node
 
-var card_manager
-enum CombatState { NOT_IN_COMBAT, PLAYER_TURN, ENEMY_TURN }
-var combat_state = CombatState.NOT_IN_COMBAT
-var player
-var enemy
-var turn_number = 1
-@onready var music = $"../Music"
-@onready var slime_attack = $slimeAttack
-
-enum EnemyType {
-	SLIME,
-	GHOUL,
-	GOLEM
+# Combat state management
+enum CombatState {
+	NOT_IN_COMBAT,
+	IN_COMBAT,
+	PLAYER_TURN,
+	ENEMY_TURN,
+	COMBAT_ENDED
 }
 
+# Signals for combat events
+signal combat_started(enemy_type: String)
+signal combat_ended(victory: bool)
+signal player_turn_started
+signal enemy_turn_started
+signal damage_dealt(amount: int, target: String)
+signal status_applied(status: Dictionary, target: String)
 
-var attacks = {
-	EnemyType.SLIME: [{"name": "Acid Splash", "damage": 5}],
-	EnemyType.GHOUL: [{"name": "Bite", "damage": 10}],
-	EnemyType.GOLEM: [{"name": "Rock Throw", "damage": 15}]
-}
+# Current state tracking
+var combat_state: CombatState = CombatState.NOT_IN_COMBAT
+var current_enemy: Node = null
+var current_enemy_type: String = ""
+var turn_count: int = 0
 
-var animation_player: AnimationPlayer
-var current_enemy = null
-var end_turn_button
+# Node references
+@onready var player = get_parent().get_node("Player")
 
-# Dictionary to store status effects and their durations
-var status_effects = {}
+# Combat configuration
+const PLAYER_TURN_FIRST = true
+const MAX_TURNS = 50
 
-func handle_die():
-	#player died
-	get_tree().quit(0)
-
-func _ready():
-	animation_player = get_node("AnimationPlayer")
-	card_manager = get_parent().get_node("CardManager")
-	player = get_parent().get_node("Player")
-	end_turn_button = player.get_node("Control/EndTurn")
-
-func _input(event):
-	if event.is_action_pressed("end_turn") and combat_state == CombatState.PLAYER_TURN:
-		print("end turn")
+func _ready() -> void:
+	if not player:
+		push_error("CombatHandler: Player node not found")
+		return
+	print_debug("CombatHandler initialized successfully")
+func start_combat_with_enemy(enemy_type: String) -> void:
+	if combat_state != CombatState.NOT_IN_COMBAT:
+		push_warning("CombatHandler: Combat already in progress")
+		return
+	
+	print_debug("Starting combat with enemy type: ", enemy_type)
+	# Find the enemy
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	for enemy in enemies:
+		if enemy.enum_to_string(enemy.enemy_type) == enemy_type:
+			current_enemy = enemy
+			break
+	
+	if not current_enemy:
+		push_error("CombatHandler: Enemy not found for type: " + enemy_type)
+		return
+	
+	# Initialize combat
+	combat_state = CombatState.IN_COMBAT
+	current_enemy_type = enemy_type
+	turn_count = 0
+	GlobalVars.in_combat = true
+	
+	emit_signal("combat_started", enemy_type)
+	
+	# Notify entities
+	if is_instance_valid(current_enemy):
+		current_enemy.handle_combat_start()
+	if is_instance_valid(player):
+		player.handle_combat_start()
+		# Make sure cards are playable
+		var card_manager = get_parent().get_node_or_null("CardManager")
+		if card_manager:
+			card_manager.handle_combat_start()
+	
+	# Start first turn
+	if PLAYER_TURN_FIRST:
+		start_player_turn()
+	else:
 		start_enemy_turn()
 
-func start_combat_with_enemy(enemyTypeStr: String):
-	combat_state = CombatState.PLAYER_TURN
-	music.play()
-	# Set can_move to false for all enemies
-	GlobalVars.in_combat = true
-
-	var enemyType = match_enemy_type(enemyTypeStr)
-	if enemyType == null:
-		print("Error: Invalid enemy type string")
+func start_player_turn() -> void:
+	if combat_state != CombatState.IN_COMBAT:
 		return
-
-	# Start combat with the specified enemy type
-	print("Combat started with", enemyTypeStr)
-	current_enemy = enemyType
 	
-	start_player_turn()
-
-
-
-func match_enemy_type(enemyTypeStr: String) -> EnemyType:
-	match enemyTypeStr:
-		"SLIME":
-			return EnemyType.SLIME
-		"GHOUL":
-			return EnemyType.GHOUL
-		"GOLEM":
-			return EnemyType.GOLEM
-		_:
-			return EnemyType.SLIME
-
-func start_enemy_turn():
-	match current_enemy:
-		EnemyType.SLIME:
-			var attack = attacks[EnemyType.SLIME][randi() % attacks[EnemyType.SLIME].size()]
-			slime_attack.play()
-			apply_damage_to_player(attack["damage"])
-		EnemyType.GHOUL:
-			var attack = attacks[EnemyType.GHOUL][randi() % attacks[EnemyType.GHOUL].size()]
-			apply_damage_to_player(attack["damage"])
-		EnemyType.GOLEM:
-			var attack = attacks[EnemyType.GOLEM][randi() % attacks[EnemyType.GOLEM].size()]
-			apply_damage_to_player(attack["damage"])
+	print_debug("Starting player turn")
+	combat_state = CombatState.PLAYER_TURN
+	turn_count += 1
 	
+	if turn_count > MAX_TURNS:
+		push_warning("CombatHandler: Maximum turn limit reached")
+		end_combat()
+		return
+	
+	emit_signal("player_turn_started")
+	if is_instance_valid(player):
+		player.handle_turn_start()
+		# Make sure cards are enabled
+		var card_manager = get_parent().get_node_or_null("CardManager")
+		if card_manager:
+			card_manager.handle_turn_start()
+			
+			
+func apply_card_effect_to_enemy(card: Node) -> void:
+	if not is_instance_valid(current_enemy):
+		push_error("CombatHandler: Cannot apply card effect - no current enemy")
+		return
+	
+	print_debug("Applying card effect: ", card.name if card.has_method("get_name") else "Unknown card")
+	if "immediate_effect" in card:
+		_process_immediate_effect(card.immediate_effect)
+
+func damage_enemy(effect: Dictionary) -> void:
+	if not is_instance_valid(current_enemy):
+		push_error("CombatHandler: Cannot damage enemy - no current enemy")
+		return
+	
+	var damage = effect.get("amount", 0)
+	print_debug("Processing damage effect: ", effect)
+	if damage > 0:
+		deal_damage_to_enemy(damage)
+
+func apply_status_to_enemy(status: Dictionary) -> void:
+	if not is_instance_valid(current_enemy):
+		push_error("CombatHandler: Cannot apply status - no current enemy")
+		return
+	
+	print_debug("Applying status effect to enemy: ", status)
+	apply_status_effect(status, "enemy")
+
+func move_player(effect: Dictionary) -> void:
+	if not is_instance_valid(player):
+		push_error("CombatHandler: Cannot move player - player not found")
+		return
+	
+	print_debug("Processing move effect: ", effect)
+	if player.has_method("move_to"):
+		var target_position = effect.get("target_position")
+		if target_position:
+			player.move_to(target_position)
+
+func end_combat(player_victory: bool = false) -> void:
+	print_debug("Ending combat. Player victory: ", player_victory)
+	
+	if combat_state == CombatState.NOT_IN_COMBAT:
+		return
+	
+	combat_state = CombatState.COMBAT_ENDED
+	GlobalVars.in_combat = false
+	
+	if is_instance_valid(current_enemy):
+		current_enemy.handle_combat_end()
+	if is_instance_valid(player):
+		player.handle_combat_end()
+	
+	emit_signal("combat_ended", player_victory)
+	
+	combat_state = CombatState.NOT_IN_COMBAT
+	current_enemy = null
+	current_enemy_type = ""
+	turn_count = 0
+	print_debug("Combat ended successfully")
+
+func start_enemy_turn() -> void:
+	if combat_state != CombatState.IN_COMBAT:
+		return
+	
+	print_debug("Starting enemy turn ", turn_count)
+	combat_state = CombatState.ENEMY_TURN
+	
+	emit_signal("enemy_turn_started")
+	if is_instance_valid(current_enemy):
+		current_enemy.take_action()
+
+func deal_damage_to_player(damage: int, attack_type: String = "") -> void:
+	if not is_instance_valid(player):
+		push_error("CombatHandler: Cannot deal damage - player not found")
+		return
+	
+	print_debug("Dealing ", damage, " damage to player with attack type: ", attack_type)
+	var final_damage = calculate_damage(damage, attack_type, player)
+	player.take_damage(final_damage)
+	emit_signal("damage_dealt", final_damage, "player")
 	
 	if player.health <= 0:
-		handle_die()
+		print_debug("Player defeated")
+		end_combat(false)
+
+func deal_damage_to_enemy(damage: int, attack_type: String = "") -> void:
+	if not is_instance_valid(current_enemy):
+		push_error("CombatHandler: Cannot deal damage - no current enemy")
+		return
 	
-	turn_number += 1
-	start_player_turn()
+	print_debug("Dealing ", damage, " damage to enemy with attack type: ", attack_type)
+	var final_damage = calculate_damage(damage, attack_type, current_enemy)
+	current_enemy.take_damage(final_damage)
+	emit_signal("damage_dealt", final_damage, "enemy")
 	
-func start_player_turn():
-	player.mana = player.max_mana
-	card_manager.handle_start_of_turn()
+	if current_enemy.health <= 0:
+		print_debug("Enemy defeated")
+		end_combat(true)
 
-func apply_damage_to_player(damage):
-	player.health -= damage
-	if player.health <= 0:
-		player.health = 0
-		emit_signal("player_defeated")
-
-func damage_enemy(effect):
-	var dmg = effect["value"]
-	enemy.health -= dmg
-
-func move_player(effect):
+func calculate_damage(base_damage: int, attack_type: String, target: Node) -> int:
+	var final_damage = base_damage
 	
-	var dir = effect["direction"]
-	var dis = int(effect["distance"])
-	print( "dir, ", dir , " dis ", dis)
+	if target.has_method("get_status_effects"):
+		var statuses = target.get_status_effects()
+		for status in statuses:
+			if "damage_modifier" in status:
+				final_damage = final_damage * status.damage_modifier
+				print_debug("Damage modified by status effect: ", final_damage)
+	
+	return int(round(final_damage))
 
-func apply_card_effect_to_enemy(card):
-	#based on the effect, apply appropraite for theduration
-	pass
+func _process_immediate_effect(effect: Dictionary) -> void:
+	print_debug("Processing immediate effect: ", effect)
+	match effect.get("type"):
+		"damage":
+			deal_damage_to_enemy(effect.get("amount", 0))
+		"status":
+			apply_status_effect(effect.get("status", {}), "enemy")
+		"heal":
+			if is_instance_valid(player):
+				player.heal(effect.get("amount", 0))
+
+func apply_status_effect(status: Dictionary, target: String) -> void:
+	var target_node = null
+	
+	match target:
+		"player":
+			target_node = player
+		"enemy":
+			target_node = current_enemy
+	
+	if not is_instance_valid(target_node):
+		push_error("CombatHandler: Cannot apply status - target not found: " + target)
+		return
+	
+	print_debug("Applying status effect to ", target, ": ", status)
+	if target_node.has_method("apply_status"):
+		target_node.apply_status(status)
+		emit_signal("status_applied", status, target)
+
+func end_turn() -> void:
+	print_debug("Ending turn in state: ", combat_state)
+	match combat_state:
+		CombatState.PLAYER_TURN:
+			combat_state = CombatState.IN_COMBAT
+			start_enemy_turn()
+		CombatState.ENEMY_TURN:
+			combat_state = CombatState.IN_COMBAT
+			start_player_turn()
+
+func is_in_combat() -> bool:
+	return combat_state != CombatState.NOT_IN_COMBAT
+
+func get_current_enemy_type() -> String:
+	return current_enemy_type

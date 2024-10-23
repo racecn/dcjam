@@ -1,77 +1,55 @@
 extends Node3D
 
-# Enumerations for direction and state
-enum Direction {
-	NORTH,
-	SOUTH,
-	EAST,
-	WEST
-}
+# Enums
+enum Direction { NORTH, SOUTH, EAST, WEST }
+enum State { EXPLORING, PATROLLING, MOVING_TO_TARGET }
+enum EnemyBehavior { STATIC, EXPLORING, PATROLLING }
+enum EnemyType { SLIME, GHOUL, GOLEM }
 
-enum State {
-	EXPLORING,
-	PATROLLING,
-	MOVING_TO_TARGET
-}
-
-enum EnemyBehavior {
-	STATIC,
-	EXPLORING,
-	PATROLLING
-}
-
-enum EnemyType {
-	SLIME,
-	GHOUL,
-	GOLEM
-}
-
-@export var enemy_type = EnemyType.SLIME
-
-var CombatHandler
-
-@export var enemyType: EnemyType
-# Variables to track the current direction, state, target position, and movement properties
-var current_direction = Direction.NORTH
-var current_state = State.EXPLORING
-var target_position: Vector3
-var move_speed = 4.0
-var update_interval = 2.0
-var is_moving = false
-var random_moves_made = 0
-var max_random_moves = 5  # Number of random moves before using A*
-
-# Variables for exploration and patrolling logic
-var exploring_path = []
-var patrol_route = []
-var key_points = []
-var straight_path_length = 0
-var last_direction = null
-var hallway_threshold = 5
-var current_patrol_point_index = 0
-var combat_manager
-var current_path = [] 
-
-var health
-var max_health
-
-# References to nodes
+# Node references
 @onready var raycast = $RayCast3D
 @onready var sprite = $Sprite3D
 @onready var moveTimer = $moveTimer
-@onready var tile_map = $TileMap  # Reference to the TileMap node
+@onready var tile_map = $TileMap
+@onready var area3d = $Area3D
 
+# Enemy configuration
+@export var enemy_type: EnemyType = EnemyType.SLIME
+@export var max_random_moves: int = 5
+
+# Combat-related variables
+var CombatHandler: Node
+var health: int
+var max_health: int
+var current_statuses: Array = []
+
+# Movement and state variables
+var current_direction = Direction.NORTH
+var current_state = State.EXPLORING
+var target_position: Vector3
+var move_speed: float = 4.0
+var update_interval: float = 2.0
+var is_moving: bool = false
+var random_moves_made: int = 0
+
+# Exploration variables
+var exploring_path: Array = []
+var patrol_route: Array = []
+var key_points: Array = []
+var straight_path_length: int = 0
+var last_direction = null
+var hallway_threshold: int = 5
+var current_patrol_point_index: int = 0
+var current_path: Array = []
+
+# Enemy attacks configuration
 var attacks = {
-	EnemyType.SLIME: [{"name": "Acid Splash", "damage": 5}],
-	EnemyType.GHOUL: [{"name": "Bite", "damage": 10}],
-	EnemyType.GOLEM: [{"name": "Rock Throw", "damage": 15}]
+	EnemyType.SLIME: [{"name": "Acid Splash", "damage": 5, "type": "acid"}],
+	EnemyType.GHOUL: [{"name": "Bite", "damage": 10, "type": "physical"}],
+	EnemyType.GOLEM: [{"name": "Rock Throw", "damage": 15, "type": "physical"}]
 }
 
-func choose_random_attack() -> Dictionary:
-	return attacks[enemy_type][randi() % attacks[enemy_type].size()]
-
-
-# Node class for A* pathfinding
+# A* Pathfinding Node Class
 class AStarNode:
 	var position: Vector2
 	var g_cost: int
@@ -87,23 +65,96 @@ class AStarNode:
 	func f_cost() -> int:
 		return g_cost + h_cost
 
-# Heuristic function for A* (Manhattan distance)
+# Add this at the start of Enemy's _ready function
+# Add this to your Enemy script
+func _ready() -> void:
+	# Add to enemies group
+	if not is_in_group("enemies"):
+		add_to_group("enemies")
+	print_debug("Enemy added to 'enemies' group: ", name)
+	
+	# Get CombatHandler reference
+	CombatHandler = get_parent().get_node("CombatHandler")
+	if not CombatHandler:
+		push_error("Enemy: CombatHandler not found")
+	
+	# Initialize based on enemy type
+	match enemy_type:
+		EnemyType.SLIME:
+			max_health = 20
+			health = max_health
+			move_speed = 2.0
+			sprite.texture = preload("res://assets/textures/slime/Idle01.png")
+		EnemyType.GHOUL:
+			max_health = 30
+			health = max_health
+			move_speed = 3.5
+			sprite.texture = preload("res://assets/textures/ghoul/Idle_Animation/0001.png")
+		EnemyType.GOLEM:
+			max_health = 50
+			health = max_health
+			move_speed = 1.5
+			sprite.texture = preload("res://assets/textures/golem/Golem_Body.png")
+	
+	# Initialize movement
+	target_position = global_transform.origin
+	is_moving = false
+	set_process(true)
+	
+	# Setup timer
+	if moveTimer:
+		moveTimer.wait_time = update_interval
+		moveTimer.start()
+	else:
+		push_error("Enemy: moveTimer node not found")
+	
+	print_debug("Enemy initialized: ", name, " Type: ", enum_to_string(enemy_type))
+	
+func _initialize_enemy_stats() -> void:
+	match enemy_type:
+		EnemyType.SLIME:
+			max_health = 20
+			move_speed = 2.0
+			sprite.texture = preload("res://assets/textures/slime/Idle01.png")
+		EnemyType.GHOUL:
+			max_health = 30
+			move_speed = 3.5
+			sprite.texture = preload("res://assets/textures/ghoul/Idle_Animation/0001.png")
+		EnemyType.GOLEM:
+			max_health = 50
+			move_speed = 1.5
+			sprite.texture = preload("res://assets/textures/golem/Golem_Body.png")
+	
+	health = max_health
+
+# Collision Setup
+func _setup_collision() -> void:
+	if not area3d:
+		push_error("Enemy: Area3D node not found")
+		return
+		
+	if not area3d.area_entered.is_connected(_on_area_3d_area_entered):
+		area3d.area_entered.connect(_on_area_3d_area_entered)
+	if not area3d.body_entered.is_connected(_on_area_3d_body_entered):
+		area3d.body_entered.connect(_on_area_3d_body_entered)
+
+# Pathfinding Functions
 func heuristic(start: Vector2, end: Vector2) -> int:
 	return abs(start.x - end.x) + abs(start.y - end.y)
 
-# A* pathfinding functions
 func a_star_search(start: Vector2, end: Vector2) -> Array:
 	var open_set = [AStarNode.new(start, 0, heuristic(start, end), null)]
-	var closed_set = {}  # Make sure this is a Dictionary
+	var closed_set = {}
 
 	while open_set.size() > 0:
 		var current: AStarNode = open_set[0]
 		for i in range(open_set.size()):
-			if open_set[i].f_cost() < current.f_cost() or (open_set[i].f_cost() == current.f_cost() and open_set[i].h_cost < current.h_cost):
+			if open_set[i].f_cost() < current.f_cost() or \
+			   (open_set[i].f_cost() == current.f_cost() and open_set[i].h_cost < current.h_cost):
 				current = open_set[i]
 
 		open_set.erase(current)
-		closed_set[current.position] = true  # Correctly using Dictionary
+		closed_set[current.position] = true
 
 		if current.position == end:
 			return reconstruct_path(current)
@@ -115,6 +166,7 @@ func a_star_search(start: Vector2, end: Vector2) -> Array:
 			var tentative_g_cost: int = current.g_cost + 1
 			var neighbour_in_open_set: bool = false
 			var neighbour: AStarNode
+
 			for node in open_set:
 				if node.position == neighbour_pos:
 					neighbour = node
@@ -122,8 +174,12 @@ func a_star_search(start: Vector2, end: Vector2) -> Array:
 					break
 
 			if not neighbour_in_open_set or tentative_g_cost < neighbour.g_cost:
-				neighbour = AStarNode.new(neighbour_pos, tentative_g_cost, heuristic(neighbour_pos, end), current)
-				neighbour._init(neighbour_pos, tentative_g_cost, heuristic(neighbour_pos, end), current)  # Correctly initializing AStarNode
+				neighbour = AStarNode.new(
+					neighbour_pos,
+					tentative_g_cost,
+					heuristic(neighbour_pos, end),
+					current
+				)
 				if not neighbour_in_open_set:
 					open_set.append(neighbour)
 
@@ -131,15 +187,14 @@ func a_star_search(start: Vector2, end: Vector2) -> Array:
 
 func get_neighbour_positions(pos: Vector2) -> Array:
 	var neighbours = []
-	var directions: Array = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
+	var directions = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
 
 	for direction in directions:
-		var neighbour_pos: Vector2 = pos + direction
+		var neighbour_pos = pos + direction
 		if can_move_to_grid_pos(neighbour_pos):
 			neighbours.append(neighbour_pos)
 
 	return neighbours
-
 
 func reconstruct_path(current: AStarNode) -> Array:
 	var path = []
@@ -149,51 +204,8 @@ func reconstruct_path(current: AStarNode) -> Array:
 	path.reverse()
 	return path
 
-# Call this function to start pathfinding from the enemy's current position to a target
-func start_pathfinding_to(target_global_position: Vector3):
-	var start = to_grid_position(global_transform.origin)
-	var end = to_grid_position(target_global_position)
-	var path = a_star_search(start, end)
-	# Use the returned 'path' to move your enemy
-
-# Initialization function
-func _ready():
-	CombatHandler = get_parent().get_node("CombatHandler")
-
-	match enemy_type:
-		EnemyType.SLIME:
-			max_health = 20
-			move_speed = 2.0
-		EnemyType.GHOUL:
-			max_health = 30
-			move_speed = 3.5
-		EnemyType.GOLEM:
-			max_health = 50
-			move_speed = 1.5
-
-	match enemy_type:
-		EnemyType.SLIME:
-			sprite.texture = preload("res://assets/textures/slime/Idle01.png")
-		EnemyType.GHOUL:
-			sprite.texture = preload("res://assets/textures/ghoul/Idle_Animation/0001.png")
-		EnemyType.GOLEM:
-			sprite.texture = preload("res://assets/textures/golem/Golem_Body.png")
-
-	target_position = global_transform.origin
-	set_process(true)
-	moveTimer.wait_time = update_interval
-	moveTimer.start()
-
-
-
-func handle_combat_start():
-	pass
-	
-func handle_combat_end():
-	pass
-
-# Process function to handle movement and state updates
-func _process(delta: float):
+# Movement Functions
+func _process(delta: float) -> void:
 	if !GlobalVars.in_combat:
 		tile_map.update_internals()
 		match current_state:
@@ -207,29 +219,15 @@ func _process(delta: float):
 					move_towards_target(delta)
 				else:
 					if current_path.size() > 0:
-						current_path.pop_front()  # Remove the first element of the path
+						current_path.pop_front()
 						if current_path.size() > 0:
 							target_position = to_world_position(current_path[0])
 							is_moving = true
 						else:
-							# Reached the target, switch back to exploring
 							current_state = State.EXPLORING
 							random_moves_made = 0
 
-# Function to check if the entity can move to a specific grid position
-func can_move_to_grid_pos(grid_pos: Vector2) -> bool:
-	var layer = 0
-	var atlas_coords = tile_map.get_cell_atlas_coords(layer, grid_pos)
-	return atlas_coords != Vector2i(0, 2)  # Check if the cell is not a wall
-
-func to_world_position(grid_pos: Vector2) -> Vector3:
-	var world_x = grid_pos.x + 0.5
-	var world_z = grid_pos.y + 0.5
-	return Vector3(world_x, 0.5, world_z)  # Assuming the tiles are centered at Y=0.5
-
-
-# Function to move the entity towards the target position
-func move_towards_target(delta: float):
+func move_towards_target(delta: float) -> void:
 	var current_position = global_transform.origin
 	var new_position = current_position.lerp(target_position, move_speed * delta)
 
@@ -244,17 +242,8 @@ func move_towards_target(delta: float):
 		is_moving = false
 		update_tile_map(grid_pos)
 
-# Function to add a wall to the tile map at a specific grid position
-func add_wall_to_tile_map(grid_pos: Vector2):
-	print("adding wall")
-	var layer = 0
-	tile_map.set_cell(layer, grid_pos, 3, Vector2i(0, 2))  # Set the cell as a wall
-	tile_map.update_internals()
-
-# Function to start the exploring movement
-func start_exploring_movement():
+func start_exploring_movement() -> void:
 	if random_moves_made < max_random_moves:
-		# Make a random move
 		var direction = choose_random_direction()
 		if can_move_in_direction(direction):
 			move_in_direction(direction)
@@ -262,7 +251,6 @@ func start_exploring_movement():
 			update_movement_tracking(direction)
 			random_moves_made += 1
 	else:
-		# Use A* pathfinding to move to an unexplored area
 		var unexplored_target = find_unexplored_target()
 		if unexplored_target:
 			current_state = State.MOVING_TO_TARGET
@@ -270,7 +258,162 @@ func start_exploring_movement():
 			if current_path.size() > 0:
 				target_position = to_world_position(current_path[0])
 				is_moving = true
+
+# Grid and World Position Functions
+func to_grid_position(world_position: Vector3) -> Vector2:
+	return Vector2(floor(world_position.x), floor(world_position.z))
+
+func to_world_position(grid_pos: Vector2) -> Vector3:
+	return Vector3(grid_pos.x + 0.5, 0.5, grid_pos.y + 0.5)
+
+func can_move_to_grid_pos(grid_pos: Vector2) -> bool:
+	var layer = 0
+	var atlas_coords = tile_map.get_cell_atlas_coords(layer, grid_pos)
+	return atlas_coords != Vector2i(0, 2)
+
+func add_wall_to_tile_map(grid_pos: Vector2) -> void:
+	var layer = 0
+	tile_map.set_cell(layer, grid_pos, 3, Vector2i(0, 2))
+	tile_map.update_internals()
+
+# Combat Functions
+func _on_area_3d_area_entered(area: Area3D) -> void:
+	print("Area entered: ", area.name)
+	if area.is_in_group("player"):
+		_initiate_combat()
+
+func _on_area_3d_body_entered(body: Node3D) -> void:
+	print("Body entered: ", body.name)
+	if body.is_in_group("player"):
+		_initiate_combat()
+
+func _initiate_combat() -> void:
+	if not is_instance_valid(CombatHandler):
+		push_error("Enemy: Cannot initiate combat - CombatHandler not found")
+		return
+	
+	if GlobalVars.in_combat:
+		print("Already in combat, ignoring collision")
+		return
+	
+	print("Initiating combat with enemy type: ", enum_to_string(enemy_type))
+	CombatHandler.start_combat_with_enemy(enum_to_string(enemy_type))
+
+func handle_combat_start() -> void:
+	print_debug("Enemy ", name, " entering combat...")
+	
+	# Stop normal movement and exploration
+	is_moving = false
+	current_state = State.EXPLORING  # Reset state for after combat
+	
+	# Initialize combat stats
+	health = max_health
+	current_statuses.clear()
+	
+	# Disable normal processing during combat
+	set_process(false)
+	if moveTimer and moveTimer.is_inside_tree():
+		moveTimer.stop()
+	
+	print_debug("Enemy combat initialization complete")
+
+func handle_combat_end() -> void:
+	print_debug("Enemy ", name, " exiting combat...")
+	
+	# Re-enable normal processing
+	set_process(true)
+	if moveTimer and moveTimer.is_inside_tree():
+		moveTimer.start()
+		
+	# Reset any combat-specific states
+	current_statuses.clear()
+	
+	print_debug("Enemy returned to normal state")
+
+# Add these helper functions for combat state management
+func take_damage(amount: int) -> void:
+	if not is_instance_valid(self):
+		return
+		
+	health -= amount
+	print_debug("Enemy took ", amount, " damage. Health: ", health, "/", max_health)
+	
+	if health <= 0:
+		handle_death()
+
+func handle_death() -> void:
+	print_debug("Enemy defeated")
+	if CombatHandler and is_instance_valid(CombatHandler):
+		# Let the CombatHandler know the enemy is defeated
+		CombatHandler.end_combat(true)
+	queue_free()
+
+func get_status_effects() -> Array:
+	return current_statuses
+
+func apply_status(status: Dictionary) -> void:
+	current_statuses.append(status)
+	print_debug("Status applied to enemy: ", status)
+
+# Helper function for status effect processing
+func process_status_effects() -> void:
+	var statuses_to_remove = []
+	
+	for status in current_statuses:
+		if "duration" in status:
+			status.duration -= 1
+			if status.duration <= 0:
+				statuses_to_remove.append(status)
 				
+		if "damage_per_turn" in status:
+			take_damage(status.damage_per_turn)
+			
+	for status in statuses_to_remove:
+		current_statuses.erase(status)
+
+# Add this to track combat state internally
+var in_combat: bool = false:
+	set(value):
+		in_combat = value
+		if value:
+			handle_combat_start()
+		else:
+			handle_combat_end()
+	get:
+		return in_combat
+
+
+func take_action() -> void:
+	var attack = choose_random_attack()
+	perform_attack(attack)
+	emit_signal("enemy_action_complete")
+
+func perform_attack(attack: Dictionary) -> void:
+	if not is_instance_valid(CombatHandler):
+		push_error("Enemy: Cannot perform attack - CombatHandler not found")
+		return
+	
+	CombatHandler.deal_damage_to_player(attack.damage, attack.type)
+
+# Helper Functions
+func choose_random_attack() -> Dictionary:
+	var enemy_attacks = attacks[enemy_type]
+	return enemy_attacks[randi() % enemy_attacks.size()]
+
+func choose_random_direction() -> int:
+	return randi() % 4
+
+func enum_to_string(enemyType: EnemyType) -> String:
+	match enemyType:
+		EnemyType.SLIME:
+			return "SLIME"
+		EnemyType.GHOUL:
+			return "GHOUL"
+		EnemyType.GOLEM:
+			return "GOLEM"
+	return ""
+
+
 
 func find_unexplored_target() -> Vector2:
 	# Example logic: Iterate through the tilemap and find the first empty cell
@@ -321,9 +464,6 @@ func update_movement_tracking(direction: int):
 		straight_path_length = 0
 	straight_path_length += 1
 	last_direction = direction
-
-func choose_random_direction() -> int:
-	return randi() % 4
 
 func can_move_in_direction(direction: int) -> bool:
 	var raycast_direction = Vector3.ZERO
@@ -381,9 +521,6 @@ func _on_move_timer_timeout():
 		State.PATROLLING:
 			move_to_next_patrol_point()
 
-func to_grid_position(world_position: Vector3) -> Vector2:
-	# Convert world position to grid position
-	return Vector2(floor(world_position.x), floor(world_position.z))
 
 func update_tile_map(grid_pos: Vector2i):
 	var layer = 0 
@@ -401,16 +538,6 @@ func update_tile_map(grid_pos: Vector2i):
 	
 	tile_map.update_internals()
 
-func enum_to_string(enemyType: EnemyType) -> String:
-	match enemyType:
-		EnemyType.SLIME:
-			return "SLIME"
-		EnemyType.GHOUL:
-			return "GHOUL"
-		EnemyType.GOLEM:
-			return "GOLEM"
-	return ""
-
 func _on_area_3d_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	print("area colid")
 	if area.get_name() == "PlayerArea":
@@ -418,16 +545,3 @@ func _on_area_3d_area_shape_entered(area_rid, area, area_shape_index, local_shap
 		if is_instance_valid(self):
 			CombatHandler.start_combat_with_enemy(enum_to_string(enemy_type))
 
-
-
-
-func take_action():
-	var attack = choose_random_attack()
-	perform_attack(attack)
-	
-	emit_signal("enemy_action_complete")  # Signal that the enemy has completed its action.
-
-# The perform_attack method uses the combat_handler to apply damage to the player.
-func perform_attack(attack):
-	# Call the method in CombatHandler to apply damage to the player.
-	combat_manager.deal_damage_to_player(attack.damage)

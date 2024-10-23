@@ -1,3 +1,6 @@
+Control
+Label
+Button
 AudioStreamPlayer
 TextureButton
 Node
@@ -7,8 +10,5 @@ NinePatchRect
 PanelContainer
 TextureRect
 TextureProgressBar
-Label
-Control
 Panel
 AudioListener3D
-VBoxContainer

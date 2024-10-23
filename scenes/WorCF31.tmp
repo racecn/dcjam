@@ -17,8 +17,6 @@ Map = ExtResource("2_j21jd")
 [node name="Player" parent="." instance=ExtResource("2_g271l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5)
 
-[node name="CombatUI" parent="." instance=ExtResource("3_mi7a4")]
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("3_dlpsk")
 
@@ -34,3 +32,5 @@ volume_db = -12.225
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_cggnk")
 bus = &"Music"
+
+[node name="CombatUI" parent="." instance=ExtResource("3_mi7a4")]

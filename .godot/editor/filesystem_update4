@@ -1,5 +1,6 @@
 res://scenes/Map.tscn
 res://entities/Card.gd
+res://scenes/CombatHandler.gd
 res://scenes/World.gd
 res://assets/materials/Bricks.tres
 res://assets/materials/Bricks2.tres
@@ -13,6 +14,8 @@ res://Player.tscn
 res://entities/Card.tscn
 res://card_manager.tscn
 res://scenes/Cell.tscn
-res://scripts/CardManager.gd
-res://scenes/CombatHandler.gd
 res://Player.gd
+res://Button.gd
+res://scripts/CombatUI.gd
+res://scenes/CombatUI.tscn
+res://scripts/CardManager.gd
